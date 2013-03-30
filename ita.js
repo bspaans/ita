@@ -73,3 +73,19 @@ var mergeSort = function(arr) {
     mergeHelp(0, arr.length - 1);
     return arr;
 };
+
+
+var bubbleSort = function(arr) {
+
+    var arr = arr.slice(0);
+    for (var i = 0; i < arr.length ; i++) {
+        for (var j = arr.length - 1; j > i; j--) {
+            if (arr[j] < arr[j - 1]) {
+                var tmp = arr[j];
+                arr[j] = arr[j - 1];
+                arr[j - 1] = tmp;
+            }
+        }
+    }
+    return arr;
+};

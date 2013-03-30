@@ -61,3 +61,16 @@ test("Merge sort fuzz test", function() {
     fuzzTestSortFunction(mergeSort, 100, 100);
     fuzzTestSortFunction(mergeSort, 100, 101);
 });
+
+test("Bubble sort", function() {
+
+    var arr = [3,2,1]
+    var sorted = bubbleSort(arr);
+    deepEqual(sorted, [1,2,3]);
+});
+
+test("Bubble sort fuzz test", function() {
+
+    fuzzTestSortFunction(bubbleSort, 100, 100);
+    fuzzTestSortFunction(bubbleSort, 100, 101);
+});
