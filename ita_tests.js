@@ -1,9 +1,18 @@
 
+var fuzzTestSortFunction = function(sortFunction, nrOfRuns, nrOfElems) {
+
+    var nrOfElems = nrOfElems == undefined ? 100 : nrOfElems;
+    for (var i = 0; i < nrOfRuns; i++) {
+        var arr = randomArray(nrOfElems, 0, 100);
+        var sorted = sortFunction(arr);
+        ok(isSorted(sorted));
+    }
+};
+
 
 module("Introduction to Algorithms - chapter 2.1");
 
-
-test("Sort predicate", function() {
+test("I can test that an array is sorted correctly", function() {
 
     ok(isSorted([1,2,3]));
     ok(isSorted([1,1,2,3]));
@@ -33,11 +42,22 @@ test("Insertion sort", function() {
 
 test("Insertion sort fuzz test", function() {
 
-    for (var i = 0; i < 50; i++) {
-        var arr = randomArray(100, 0, 100);
-        var sorted = insertionSort(arr);
-        ok(isSorted(sorted));
-    }
+    fuzzTestSortFunction(insertionSort, 100, 100);
+    fuzzTestSortFunction(insertionSort, 100, 101);
 });
 
 
+module("Introduction to Algorithms - chapter 2.3");
+
+test("Merge sort", function() {
+
+    var arr = [3,2,1]
+    var sorted = mergeSort(arr);
+    deepEqual(sorted, [1,2,3]);
+});
+
+test("Merge sort fuzz test", function() {
+
+    fuzzTestSortFunction(mergeSort, 100, 100);
+    fuzzTestSortFunction(mergeSort, 100, 101);
+});

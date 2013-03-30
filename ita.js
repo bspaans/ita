@@ -34,3 +34,42 @@ var insertionSort = function(arr) {
     }
     return arr;
 };
+
+
+var mergeSort = function(arr) {
+
+    var arr = arr.slice(0);
+    var merge = function(p, q, r) {
+
+        var left = arr.slice(p, q + 1)
+        var right = arr.slice(q + 1, r + 1);
+
+        left[left.length] = Number.POSITIVE_INFINITY;
+        right[right.length] = Number.POSITIVE_INFINITY;
+
+        var i = 0;
+        var j = 0;
+
+        for (var k = p; k <= r ; k++) {
+            if (left[i] <= right[j]) {
+                arr[k] = left[i];
+                i++;
+            } else {
+                arr[k] = right[j];
+                j++;
+            }
+        }
+    };
+
+    var mergeHelp = function(p, r) {
+
+        if (p < r) {
+            var q = Math.floor((p + r) / 2);
+            mergeHelp(p, q);
+            mergeHelp(q + 1, r);
+            merge(p, q, r);
+        }
+    }
+    mergeHelp(0, arr.length - 1);
+    return arr;
+};
