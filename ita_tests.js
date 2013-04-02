@@ -124,13 +124,49 @@ test("I can find the maximum sub array", function() {
     equal(result.sum, 43);
 });
 
-
-module("Introduction to Algorithms - chapter 4.2");
-
 test("I can multiply two square matrices", function() {
 
     var matrixA = [[1,1,1],[2,2,2], [3,3,3]]
     var matrixB = [[1,2,3],[1,2,3], [1,2,3]]
     var result = squareMatrixMultiply(matrixA, matrixB);
     deepEqual(result, [[3,6,9], [6,12,18], [9,18,27]])
+});
+
+module("Introduction to Algorithms - chapter 5.3");
+
+test("I can permute an array by sorting, provided that all the random priorities are distinct", function() {
+
+
+    var arr = [2,5,1,8,9,8]
+
+    // Controlled "randomization"
+    var rnd = arr.length;
+    randomFunction = function() {
+        rnd--;
+        return rnd;
+    };
+    var permutedArr = permuteArrayBySorting(randomFunction, arr);
+
+    equal(permutedArr.length, arr.length);
+    deepEqual(permutedArr, arr.reverse());
+
+    var rnd = 0;
+    randomFunction = function() {
+        rnd++;
+        return rnd;
+    };
+    permutedArr = permuteArrayBySorting(randomFunction, arr);
+    equal(permutedArr.length, arr.length);
+    deepEqual(permutedArr, arr);
+});
+
+test("I can permute an array by sorting, provided that all the random priorities are distinct. Fuzz test", function() {
+
+    for (var i = 0; i < 100; i++) {
+        var randomArr= randomArray(100, 1, 100);
+        var permutedArr = permuteArrayBySorting(Math.random, randomArr);
+        if (randomArr.length == permutedArr.length) {
+            notDeepEqual(randomArr, permutedArr);
+        }
+    }
 });
