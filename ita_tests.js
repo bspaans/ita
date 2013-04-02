@@ -125,3 +125,12 @@ test("I can find the maximum sub array", function() {
 });
 
 
+module("Introduction to Algorithms - chapter 4.2");
+
+test("I can multiply two square matrices", function() {
+
+    var matrixA = [[1,1,1],[2,2,2], [3,3,3]]
+    var matrixB = [[1,2,3],[1,2,3], [1,2,3]]
+    var result = squareMatrixMultiply(matrixA, matrixB);
+    deepEqual(result, [[3,6,9], [6,12,18], [9,18,27]])
+});

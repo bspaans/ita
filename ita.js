@@ -160,3 +160,21 @@ var findMaxSubArray = function(arr) {
     }
     return findMaxSubArrayHelper(0, arr.length - 1);
 };
+
+
+var squareMatrixMultiply = function(matrixA, matrixB) {
+    var n = matrixA.length;
+
+    matrixC = new Array(n);
+
+    for (var i = 0; i < n; i++) {
+        matrixC[i] = new Array(n);
+        for (var j = 0; j < n; j++) {
+            matrixC[i][j] = 0;
+            for (var k = 0; k < n; k++) {
+                matrixC[i][j] += matrixA[i][k] * matrixB[k][j];
+            }
+        }
+    }
+    return matrixC;
+};
