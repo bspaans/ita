@@ -244,6 +244,10 @@ test("The heap maintains the max-heap property", function() {
     this.heap.array[2] = 0;
     this.heap.maxHeapify(2);
     ok(checkMaxHeapProperty(this.heap));
+
+    this.heap.array[1] = 0;
+    this.heap.maxHeapify(1);
+    ok(checkMaxHeapProperty(this.heap));
 });
 
 
@@ -262,6 +266,7 @@ test("I can build a heap", function() {
     ok(checkMaxHeapProperty(heap));
 });
 
+
 module("Introduction to Algorithms - chapter 6.4");
 
 test("I can heap sort", function() {
@@ -271,4 +276,11 @@ test("I can heap sort", function() {
     var sorted = heap.heapSort(arr);
     ok(isSorted(sorted));
     ok(checkMaxHeapProperty(heap));
+});
+
+test("Heap sort fuzz test", function() {
+
+    var heap = new Heap();
+    fuzzTestSortFunction(heap.heapSort, 100, 100);
+    fuzzTestSortFunction(heap.heapSort, 100, 101);
 });
