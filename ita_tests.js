@@ -197,3 +197,78 @@ test("I can permute an array by randomizing in place. Fuzz test.", function() {
         notDeepEqual(randomArr, permutedArr);
     }
 });
+
+
+module("Introduction to Algorithms - chapter 6.1", {
+    setup: function() { this.heap = new Heap([16, 14, 10, 8, 7, 9, 3, 2, 4, 1]); }
+});
+
+test("I can navigate a heap", function() {
+
+    equal(this.heap.parent(1), 0);
+    equal(this.heap.parent(2), 0);
+    equal(this.heap.parent(3), 1);
+    equal(this.heap.parent(4), 1);
+    equal(this.heap.parent(5), 2);
+    equal(this.heap.parent(6), 2);
+
+    equal(this.heap.left(0), 1);
+    equal(this.heap.left(1), 3);
+    equal(this.heap.left(2), 5);
+    equal(this.heap.left(3), 7);
+    equal(this.heap.left(4), 9);
+
+    equal(this.heap.right(0), 2);
+    equal(this.heap.right(1), 4);
+    equal(this.heap.right(2), 6);
+    equal(this.heap.right(3), 8);
+});
+
+
+module("Introduction to Algorithms - chapter 6.2", {
+    setup: function() { this.heap = new Heap([16, 14, 10, 8, 7, 9, 3, 2, 4, 1]); }
+});
+
+var checkMaxHeapProperty = function(heap) {
+    for (var i = 0; i < heap.length; i++) {
+        if (heap.array[heap.parent(i)] < heap.array[i]) {
+            return false;
+        }
+    }
+    return true;
+};
+
+test("The heap maintains the max-heap property", function() {
+
+    ok(checkMaxHeapProperty(this.heap));
+    this.heap.array[2] = 0;
+    this.heap.maxHeapify(2);
+    ok(checkMaxHeapProperty(this.heap));
+});
+
+
+module("Introduction to Algorithms - chapter 6.3");
+
+test("I can build a heap", function() {
+
+    var heap = new Heap();
+    heap.buildMaxHeap([1,2,3,4,5,6]);
+    ok(checkMaxHeapProperty(heap));
+    deepEqual(heap.array, [6,5,3,4,2,1]);
+
+    heap.buildMaxHeap([1,2,3,4,5]);
+    ok(checkMaxHeapProperty(heap));
+    heap.buildMaxHeap([1]);
+    ok(checkMaxHeapProperty(heap));
+});
+
+module("Introduction to Algorithms - chapter 6.4");
+
+test("I can heap sort", function() {
+
+    var arr = [3,1,6,3,8];
+    var heap = new Heap();
+    var sorted = heap.heapSort(arr);
+    ok(isSorted(sorted));
+    ok(checkMaxHeapProperty(heap));
+});

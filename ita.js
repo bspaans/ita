@@ -20,6 +20,12 @@ var randomArray = function(n, min, max) {
     return arr;
 };
 
+var swapVariables = function(arr, i, j) {
+    var tmp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = tmp;
+};
+
 var insertionSort = function(arr) {
 
     var arr = arr.slice(0);
@@ -81,9 +87,7 @@ var bubbleSort = function(arr) {
     for (var i = 0; i < arr.length ; i++) {
         for (var j = arr.length - 1; j > i; j--) {
             if (arr[j] < arr[j - 1]) {
-                var tmp = arr[j];
-                arr[j] = arr[j - 1];
-                arr[j - 1] = tmp;
+                swapVariables(arr, j, j - 1);
             }
         }
     }
@@ -197,10 +201,52 @@ var randomizeArrayInPlace = function(randomFunction, arr) {
     var arr = arr.slice(0);
     var n = arr.length - 1;
     for (var i = 0; i <= n; i++) {
-        var tmp = arr[i];
         var rnd = Math.floor(randomFunction() * (n - i)) + i;
-        arr[i] = arr[rnd];
-        arr[rnd] = tmp;
+        swapVariables(arr, i, rnd);
     }
     return arr;
 };
+
+var Heap = function(heapArray) {
+
+    var self = this;
+    self.array = heapArray == undefined ? [] : heapArray;
+    self.length = self.array.length;
+
+    self.parent = function(index) {
+        return Math.floor((Math.max(1, index) - 1) / 2);
+    };
+    self.left = function(index) {
+        return 2 * index + 1;
+    };
+    self.right = function(index) {
+        return 2 * index + 2;
+    };
+    self.maxHeapify = function(index) {
+        var l = self.left(index);
+        var r = self.right(index);
+        largest = (l < self.length && self.array[l] > self.array[index]) ? l : index;
+        largest = (r < self.length && self.array[r] > self.array[largest]) ? r : largest;
+        if (largest != index) {
+            swapVariables(self.array, index, largest);
+            self.maxHeapify(largest);
+        }
+    };
+    self.buildMaxHeap = function(arr) {
+        self.array = arr;
+        self.length = arr.length;
+        for (var i = Math.floor(self.length / 2); i >= 0; i--) {
+            self.maxHeapify(i);
+        }
+    };
+    self.heapSort = function(arr) {
+        var arr = arr.slice(0);
+        self.buildMaxHeap(arr);
+        for (var i = arr.length - 1; i >= 1; i--) {
+            swapVariables(arr, 0, i);
+            self.length--;
+            self.maxHeapify(0);
+        }
+        return arr;
+    }
+}
