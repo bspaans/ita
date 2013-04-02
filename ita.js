@@ -150,9 +150,9 @@ var findMaxSubArray = function(arr) {
         }
         var mid = Math.floor((low + high) / 2.0);
 
-        leftMaxSub = findMaxSubArrayHelper(low, mid);
-        rightMaxSub = findMaxSubArrayHelper(mid + 1, high);
-        crossMaxSub = findMaxCrossingSubArray(arr, low, mid, high);
+        var leftMaxSub = findMaxSubArrayHelper(low, mid);
+        var rightMaxSub = findMaxSubArrayHelper(mid + 1, high);
+        var crossMaxSub = findMaxCrossingSubArray(arr, low, mid, high);
 
         if (leftMaxSub.sum >= rightMaxSub.sum && leftMaxSub.sum >= crossMaxSub.sum) {
             return leftMaxSub;
@@ -169,7 +169,7 @@ var findMaxSubArray = function(arr) {
 var squareMatrixMultiply = function(matrixA, matrixB) {
     var n = matrixA.length;
 
-    matrixC = new Array(n);
+    var matrixC = new Array(n);
 
     for (var i = 0; i < n; i++) {
         matrixC[i] = new Array(n);
@@ -225,7 +225,8 @@ var Heap = function(heapArray) {
     self.maxHeapify = function(index) {
         var l = self.left(index);
         var r = self.right(index);
-        largest = (l < self.length && self.array[l] > self.array[index]) ? l : index;
+        var largest = index;
+        largest = (l < self.length && self.array[l] > self.array[index]  ) ? l : largest;
         largest = (r < self.length && self.array[r] > self.array[largest]) ? r : largest;
         if (largest != index) {
             swapVariables(self.array, index, largest);
@@ -287,4 +288,36 @@ var PriorityQueue = function(queue) {
     };
 
     return heap;
+};
+
+
+var partition = function(arr, left, right) {
+
+    var x = arr[right];
+    var i = left - 1;
+    for (var j = left; j < right; j++) {
+        if (arr[j] < x) {
+            i++;
+            swapVariables(arr, i, j);
+        }
+    }
+    swapVariables(arr, i + 1, right);
+    return i + 1;
+};
+
+var quickSort = function(arr) {
+
+    var arr = arr.slice(0);
+
+    var quickSortHelper = function(left, right) {
+        if (left < right) {
+            var pivot = partition(arr, left, right);
+            quickSortHelper(left, pivot - 1);
+            quickSortHelper(pivot + 1, right);
+        }
+    }
+    quickSortHelper(0, arr.length - 1);
+    return arr;
+
+
 };

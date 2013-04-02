@@ -142,7 +142,7 @@ test("I can permute an array by sorting, provided that all the random priorities
 
     // Controlled "randomization"
     var rnd = arr.length;
-    randomFunction = function() {
+    var randomFunction = function() {
         rnd--;
         return rnd;
     };
@@ -347,4 +347,55 @@ test("I can insert a new element into the priority queue, while maintaining the 
     ok(checkMaxHeapProperty(queue));
     queue.insert(4);
     ok(checkMaxHeapProperty(queue));
+});
+
+
+module("Introduction to Algorithms - chapter 7.1");
+
+var arrayIsPartitionedCorrectly = function(arr, pivot) {
+    for (var i = 0; i < arr.length; i++) {
+        if (i <= pivot && arr[i] > arr[pivot]) {
+            return false;
+        } 
+        if (i > pivot && arr[i] < arr[pivot]) {
+            return false;
+        }  
+    }
+    return true;
+}
+
+test("I can partition an array", function() {
+
+    // figure 7.1
+    var arr = [2,8,7,1,3,5,6,4];
+    var pivot = partition(arr, 0, arr.length - 1);
+    deepEqual(arr, [2,1,3,4,7,5,6,8]);
+    equal(pivot, 3);
+    ok(arrayIsPartitionedCorrectly(arr, pivot));
+});
+
+test("I can partition an array. Fuzz test", function() {
+
+    for (var i = 0; i < 100; i++) {
+        var randomArr = randomArray(i + 1, 1, 100);
+        var pivot = partition(randomArr, 0, randomArr.length - 1);
+        ok(arrayIsPartitionedCorrectly(randomArr, pivot));
+    }
+});
+
+test("Quick sort", function() {
+
+    var arr = [2,8,7,1,3,5,6,4];
+    var sorted = quickSort(arr);
+    deepEqual(sorted, [1,2,3,4,5,6,7,8]);
+    
+    arr = [3,2,1];
+    sorted = quickSort(arr);
+    deepEqual(sorted, [1,2,3]);
+});
+
+test("Quick sort. Fuzz test", function() {
+
+    fuzzTestSortFunction(quickSort, 100, 100);
+    fuzzTestSortFunction(quickSort, 100, 101);
 });
