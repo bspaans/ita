@@ -249,4 +249,42 @@ var Heap = function(heapArray) {
         }
         return arr;
     }
+    return self;
 }
+
+var PriorityQueue = function(queue) {
+    var heap = new Heap();
+    heap.buildMaxHeap(queue);
+
+    heap.maximum = function() { 
+        return heap.array[0]; 
+    };
+    heap.extractMax = function() {
+        if (heap.length <= 0) {
+            throw "Heap underflow";
+        }
+
+        var max = heap.array[0];
+        heap.array[0] = heap.array[heap.length - 1];
+        heap.length--;
+        heap.maxHeapify(0);
+        return max;
+    };
+    heap.increaseKey = function(index, key) {
+        if (key < heap.array[index]) {
+            throw "new key is smaller than current key."
+        }
+        heap.array[index] = key;
+        while (index > 0 && heap.array[heap.parent(index)] < heap.array[index]) {
+            swapVariables(heap.array, index, heap.parent(index));
+            index = heap.parent(index);
+        }
+    };
+    heap.insert = function(key) {
+        heap.length++;
+        heap.array[heap.length - 1] = Number.NEGATIVE_INFINITY;
+        heap.increaseKey(heap.length - 1, key);
+    };
+
+    return heap;
+};

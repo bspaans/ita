@@ -284,3 +284,67 @@ test("Heap sort fuzz test", function() {
     fuzzTestSortFunction(heap.heapSort, 100, 100);
     fuzzTestSortFunction(heap.heapSort, 100, 101);
 });
+
+
+module("Introduction to Algorithms - chapter 6.5");
+
+test("I can create a max priority queue", function() {
+
+    var queue = new PriorityQueue([2,3,4,5,6]);
+    ok(checkMaxHeapProperty(queue));
+    equal(queue.maximum(), 6);
+});
+
+test("I can get the maximum element from the priority queue", function() {
+
+    var queue = new PriorityQueue([2,3,4,5,6]);
+    equal(queue.maximum(), 6);
+});
+
+test("I can extract the maximum element from the queue, while maintaining the max-heap priority", function() {
+
+    var queue = new PriorityQueue([2,3,4,5,6]);
+    ok(checkMaxHeapProperty(queue));
+    equal(queue.maximum(), 6);
+    var max = queue.extractMax();
+    equal(max, 6);
+    ok(checkMaxHeapProperty(queue));
+    equal(queue.maximum(), 5);
+});
+
+test("Trying to extract the maximum element from an empty queue will throw a Heap underflow", function() {
+
+    var queue = new PriorityQueue([2]);
+    queue.extractMax();
+    throws(function() { queue.extractMax() }, /Heap underflow/);
+});
+
+
+test("I can increase a priority queue's key, while maintaining the max-heap property", function() {
+
+    var queue = new PriorityQueue([2,3,4,5,6]);
+    ok(checkMaxHeapProperty(queue));
+    queue.increaseKey(1, 7);
+    ok(checkMaxHeapProperty(queue));
+
+    queue.increaseKey(3, 8);
+    ok(checkMaxHeapProperty(queue));
+});
+
+test("If I try to increase a key, but the value is lower than it currently is I get an error message", function() {
+
+    var queue = new PriorityQueue([2,3,4,5,6]);
+    throws(function() { queue.increaseKey(1, 1) }, /new key is smaller than current key/);
+});
+
+test("I can insert a new element into the priority queue, while maintaining the max-heap property", function() {
+
+    var queue = new PriorityQueue([2,3,4,5,6]);
+    ok(checkMaxHeapProperty(queue));
+    queue.insert(7);
+    ok(checkMaxHeapProperty(queue));
+    queue.insert(1);
+    ok(checkMaxHeapProperty(queue));
+    queue.insert(4);
+    ok(checkMaxHeapProperty(queue));
+});
