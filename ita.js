@@ -64,7 +64,7 @@ var mergeSort = function(arr) {
     var mergeHelp = function(p, r) {
 
         if (p < r) {
-            var q = Math.floor((p + r) / 2);
+            var q = Math.floor((p + r) / 2.0);
             mergeHelp(p, q);
             mergeHelp(q + 1, r);
             merge(p, q, r);
@@ -88,4 +88,75 @@ var bubbleSort = function(arr) {
         }
     }
     return arr;
+};
+
+
+var makeMaxSubArrayResult = function(maxLeft, maxRight, sum) {
+    return {maxLeft: maxLeft, maxRight: maxRight, sum: sum}
+};
+
+var findMaxCrossingSubArray = function(arr, low, mid, high) {
+
+    if (arr.length < 2) {
+        throw "Array should have at least two elements";
+    }
+    if (mid >= high) {
+        throw "Mid should be lower than high";
+    }
+    if (mid < low) {
+        throw "Mid should be equal to or higher than low";
+    }
+    if (high >= arr.length) {
+        throw "Indices should be in range";
+    }
+    if (low < 0) {
+        throw "Indices should be in range";
+    }
+
+    var leftSum = Number.NEGATIVE_INFINITY;
+    var sum = 0;
+    var maxLeft = undefined;
+
+    for (var i = mid; i >= low; i--) {
+        sum += arr[i];
+        if (sum > leftSum) {
+            leftSum = sum;
+            maxLeft = i;
+        }
+    }
+
+    var rightSum = Number.NEGATIVE_INFINITY;
+    sum = 0;
+    var maxRight = undefined;
+
+    for (var j = mid + 1; j <= high; j++) {
+        sum += arr[j];
+        if (sum > rightSum) {
+            rightSum = sum;
+            maxRight = j;
+        }
+    }
+    return makeMaxSubArrayResult(maxLeft, maxRight, rightSum + leftSum);
+};
+
+var findMaxSubArray = function(arr) {
+    var findMaxSubArrayHelper = function(low, high) {
+        if (low == high) {
+            return makeMaxSubArrayResult(low, high, arr[low]);
+        }
+        var mid = Math.floor((low + high) / 2.0);
+
+        leftMaxSub = findMaxSubArrayHelper(low, mid);
+        rightMaxSub = findMaxSubArrayHelper(mid + 1, high);
+        crossMaxSub = findMaxCrossingSubArray(arr, low, mid, high);
+
+        if (leftMaxSub.sum >= rightMaxSub.sum && leftMaxSub.sum >= crossMaxSub.sum) {
+            return leftMaxSub;
+        }
+        else if (rightMaxSub.sum >= leftMaxSub.sum && rightMaxSub.sum >= crossMaxSub.sum) {
+            return rightMaxSub;
+        }
+        return crossMaxSub;
+    }
+    return findMaxSubArrayHelper(0, arr.length - 1);
 };
