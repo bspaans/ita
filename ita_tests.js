@@ -1,3 +1,4 @@
+module("Introduction to Algorithms - chapter 2.1");
 
 var fuzzTestSortFunction = function(sortFunction, nrOfRuns, nrOfElems) {
 
@@ -9,15 +10,24 @@ var fuzzTestSortFunction = function(sortFunction, nrOfRuns, nrOfElems) {
     }
 };
 
-
-module("Introduction to Algorithms - chapter 2.1");
-
 test("I can test that an array is sorted correctly", function() {
 
     ok(isSorted([1,2,3]));
     ok(isSorted([1,1,2,3]));
     ok(isSorted([]));
     ok(!isSorted([3,2,1]));
+});
+
+test("I can get a random integer in a given range", function() {
+
+    for (var i = 0; i < 50; i++) {
+        for (var j = i + 1; j < 50; j++) {
+            var rnd = randRange(i, j);
+            ok(rnd >= i);
+            ok(rnd <= j);
+        }
+    }
+
 });
 
 test("I can create an array containing random numbers", function() {
@@ -398,4 +408,31 @@ test("Quick sort. Fuzz test", function() {
 
     fuzzTestSortFunction(quickSort, 100, 100);
     fuzzTestSortFunction(quickSort, 100, 101);
+});
+
+
+module("Introduction to Algorithms - chapter 7.3");
+
+test("I can run quick sort with another partition function", function() {
+
+    var functionCalled = false;
+    var anotherPartitionFunction = function(arr, left, right) {
+        functionCalled = true;
+        return left;
+    };
+    sorted = quickSort([3,2,1], anotherPartitionFunction);
+    ok(functionCalled);
+});
+
+test("I can run quick sort with randomizedPartition and it will still work", function() {
+
+    var arr = [2,8,7,1,3,5,6,4];
+    var sorted = quickSort(arr, randomizedPartition);
+    deepEqual(sorted, [1,2,3,4,5,6,7,8]);
+});
+
+test("Randomized quick sort. Fuzz test", function() {
+
+    fuzzTestSortFunction(randomizedQuickSort, 100, 100);
+    fuzzTestSortFunction(randomizedQuickSort, 100, 101);
 });

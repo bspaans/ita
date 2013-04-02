@@ -15,9 +15,13 @@ var randomArray = function(n, min, max) {
 
     var arr = new Array(n);
     for (var i = 0; i < n; i++) {
-        arr[i] = Math.floor(Math.random() * (max - min + 1)) + min;
+        arr[i] = randRange(min, max);
     }
     return arr;
+};
+
+var randRange = function(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
 var swapVariables = function(arr, i, j) {
@@ -305,19 +309,26 @@ var partition = function(arr, left, right) {
     return i + 1;
 };
 
-var quickSort = function(arr) {
+var quickSort = function(arr, partitionFunction) {
 
+    var partitionFunction = partitionFunction == undefined ? partition : partitionFunction;
     var arr = arr.slice(0);
 
     var quickSortHelper = function(left, right) {
         if (left < right) {
-            var pivot = partition(arr, left, right);
+            var pivot = partitionFunction(arr, left, right);
             quickSortHelper(left, pivot - 1);
             quickSortHelper(pivot + 1, right);
         }
     }
     quickSortHelper(0, arr.length - 1);
     return arr;
-
-
 };
+
+var randomizedPartition = function(arr, left, right) {
+    var pivot = randRange(left, right);
+    swapVariables(arr, pivot, right);
+    return partition(arr, left, right);
+};
+
+var randomizedQuickSort = function(arr) { return quickSort(arr, randomizedPartition); }
