@@ -99,7 +99,7 @@ test("I can find the max crossing sub array", function() {
     equal(result.sum, 6);
 });
 
-test("I can't find the max crossing sub array if the given ces are nonsensical", function() {
+test("I can't find the max crossing sub array if the given indices are nonsensical", function() {
 
     throws(function() { findMaxCrossingSubArray([1], 0, 0, 0)}, /^Array should have at least two elements/);
     throws(function() { findMaxCrossingSubArray([1,2], 0, 1, 1)}, /^Mid should be lower than high$/);
@@ -134,8 +134,9 @@ test("I can multiply two square matrices", function() {
 
 module("Introduction to Algorithms - chapter 5.3");
 
-test("I can permute an array by sorting, provided that all the random priorities are distinct", function() {
 
+
+test("I can permute an array by sorting, provided that all the random priorities are distinct", function() {
 
     var arr = [2,5,1,8,9,8]
 
@@ -145,7 +146,7 @@ test("I can permute an array by sorting, provided that all the random priorities
         rnd--;
         return rnd;
     };
-    var permutedArr = permuteArrayBySorting(randomFunction, arr);
+    var permutedArr = permuteArrayBySorting(randomFunction, arr); 
 
     equal(permutedArr.length, arr.length);
     deepEqual(permutedArr, arr.reverse());
@@ -163,10 +164,36 @@ test("I can permute an array by sorting, provided that all the random priorities
 test("I can permute an array by sorting, provided that all the random priorities are distinct. Fuzz test", function() {
 
     for (var i = 0; i < 100; i++) {
-        var randomArr= randomArray(100, 1, 100);
+        var randomArr = randomArray(100, 1, 100);
         var permutedArr = permuteArrayBySorting(Math.random, randomArr);
         if (randomArr.length == permutedArr.length) {
             notDeepEqual(randomArr, permutedArr);
         }
+    }
+});
+
+
+test("I can permute an array by randomizing in place", function() {
+
+    var arr = [2,5,1,8,9]
+
+    var rnd = 1.0;
+    var randomFunction = function() {
+        rnd -= 0.2;
+        return rnd;
+    };
+    var permutedArr = randomizeArrayInPlace(randomFunction, arr); 
+
+    equal(permutedArr.length, arr.length);
+    deepEqual(permutedArr, [8,1,5,2,9]);
+});
+
+test("I can permute an array by randomizing in place. Fuzz test.", function() {
+
+    for (var i = 0; i < 100; i++) {
+        var randomArr = randomArray(100, 1, 100);
+        var permutedArr = randomizeArrayInPlace(Math.random, randomArr);
+        equal(randomArr.length, permutedArr.length);
+        notDeepEqual(randomArr, permutedArr);
     }
 });

@@ -190,3 +190,17 @@ var permuteArrayBySorting = function(randomFunction, arr) {
     priorities.sort(function(a, b) { return a[0] - b[0]; })
     return $.map(priorities, function(item) { return item[1]; });
 };
+
+
+var randomizeArrayInPlace = function(randomFunction, arr) {
+
+    var arr = arr.slice(0);
+    var n = arr.length - 1;
+    for (var i = 0; i <= n; i++) {
+        var tmp = arr[i];
+        var rnd = Math.floor(randomFunction() * (n - i)) + i;
+        arr[i] = arr[rnd];
+        arr[rnd] = tmp;
+    }
+    return arr;
+};
