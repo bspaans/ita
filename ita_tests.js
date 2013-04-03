@@ -478,3 +478,20 @@ test("Tail recursive randomized quick sort. Fuzz test", function() {
     fuzzTestSortFunction(randomizedTailRecursiveQuickSort, 100, 100);
     fuzzTestSortFunction(randomizedTailRecursiveQuickSort, 100, 101);
 });
+
+
+module("Introduction to Algorithms - chapter 8.2");
+
+test("Counting sort", function() {
+
+    var arr = [3,2,1];
+    var sorted = countingSort(arr, 3);
+    deepEqual(sorted, [1,2,3]);
+});
+
+test("Counting sort. Fuzz test", function() {
+
+    var cSort = function(arr) { return countingSort(arr, 100); }
+    fuzzTestSortFunction(cSort, 100, 100);
+    fuzzTestSortFunction(cSort, 100, 101);
+});

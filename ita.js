@@ -346,6 +346,31 @@ var tailRecursiveQuickSort = function(arr, partitionFunction) {
     }
     tailRecursiveQuickSortHelper(0, arr.length - 1);
     return arr;
-}
+};
 
 var randomizedTailRecursiveQuickSort = function(arr) { return tailRecursiveQuickSort(arr, randomizedPartition); }
+
+
+var countingSort = function(arr, k) {
+    var result = new Array(arr.length);
+    var count = new Array(k + 1);
+    for (var i = -1 ; i <= k ; i++) {
+        count[i] = 0;
+    }
+
+    for (var i = 0; i < arr.length; i++) {
+        count[arr[i]]++;
+    }
+    // count[i] now contains the number of elements equal to i
+
+    for (var i = 0; i <= k; i++) {
+        count[i] += count[i - 1];
+    }
+    // count[i] now contains the number of elements less than or equal to i
+
+    for (var i = arr.length - 1; i >= 0; i--) {
+        result[count[arr[i]] - 1] = arr[i];
+        count[arr[i]]--;
+    }
+    return result;
+};
