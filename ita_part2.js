@@ -1,26 +1,3 @@
-var permuteArrayBySorting = function(randomFunction, arr) {
-    var arr = arr.slice(0);
-    var priorities = []
-    for (var i = 0; i < arr.length; i++) {
-        var p = Math.floor(randomFunction() * (arr.length ^ 3));
-        priorities.push([p, arr[i]])
-    }
-    priorities.sort(function(a, b) { return a[0] - b[0]; })
-    return $.map(priorities, function(item) { return item[1]; });
-};
-
-
-var randomizeArrayInPlace = function(randomFunction, arr) {
-
-    var arr = arr.slice(0);
-    var n = arr.length - 1;
-    for (var i = 0; i <= n; i++) {
-        var rnd = Math.floor(randomFunction() * (n - i)) + i;
-        Util.swapVariables(arr, i, rnd);
-    }
-    return arr;
-};
-
 var Heap = function(heapArray) {
 
     var self = this;

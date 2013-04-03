@@ -99,3 +99,68 @@ test("I can multiply two square matrices", function() {
     var result = squareMatrixMultiply(matrixA, matrixB);
     deepEqual(result, [[3,6,9], [6,12,18], [9,18,27]])
 });
+
+module("Introduction to Algorithms - Part II - chapter 5.3");
+
+test("I can permute an array by sorting, provided that all the random priorities are distinct", function() {
+
+    var arr = [2,5,1,8,9,8]
+
+    // Controlled "randomization"
+    var rnd = arr.length;
+    var randomFunction = function() {
+        rnd--;
+        return rnd;
+    };
+    var permutedArr = permuteArrayBySorting(randomFunction, arr); 
+
+    equal(permutedArr.length, arr.length);
+    deepEqual(permutedArr, arr.reverse());
+
+    var rnd = 0;
+    randomFunction = function() {
+        rnd++;
+        return rnd;
+    };
+    permutedArr = permuteArrayBySorting(randomFunction, arr);
+    equal(permutedArr.length, arr.length);
+    deepEqual(permutedArr, arr);
+});
+
+test("I can permute an array by sorting, provided that all the random priorities are distinct. Fuzz test", function() {
+
+    for (var i = 0; i < 100; i++) {
+        var randomArr = Util.randomArray(100, 1, 100);
+        var permutedArr = permuteArrayBySorting(Math.random, randomArr);
+        if (randomArr.length == permutedArr.length) {
+            notDeepEqual(randomArr, permutedArr);
+        }
+    }
+});
+
+test("I can permute an array by randomizing in place", function() {
+
+    var arr = [2,5,1,8,9]
+
+    var rnd = 1.0;
+    var randomFunction = function() {
+        rnd -= 0.2;
+        return rnd;
+    };
+    var permutedArr = randomizeArrayInPlace(randomFunction, arr); 
+
+    equal(permutedArr.length, arr.length);
+    deepEqual(permutedArr, [8,1,5,2,9]);
+});
+
+test("I can permute an array by randomizing in place. Fuzz test.", function() {
+
+    for (var i = 0; i < 100; i++) {
+        var randomArr = Util.randomArray(100, 1, 100);
+        var permutedArr = randomizeArrayInPlace(Math.random, randomArr);
+        equal(randomArr.length, permutedArr.length);
+        notDeepEqual(randomArr, permutedArr);
+    }
+});
+
+

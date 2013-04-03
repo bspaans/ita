@@ -29,3 +29,33 @@ using javascript, to get a better understanding of testing, algorithms and
 
 * Statistically check that the random permutations created by
   `permuteArrayBySorting` and `randomizeArrayInPlace` are uniform.
+
+
+## Implemented algorithms:
+
+### Part I - Foundations 
+
+* Insertion sort 
+* Merge sort 
+* Bubble sort 
+* Find maximum sub array 
+* Square matrix multiply 
+* Permute by sorting
+* Randomize array in place
+
+Skipped: 
+
+* Strassen's algorithm for matrix multiplication
+
+### Part II - Sorting and Order Statistics 
+
+* Heaps and heap sort (max-heap)
+* Priority queues (max-priority)
+* Quick sort
+* Randomized quick sort 
+* Tail recursive quick sort 
+* Counting sort 
+* Bucket sort 
+* Find minimum 
+* Randomized select 
+
