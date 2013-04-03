@@ -332,3 +332,20 @@ var randomizedPartition = function(arr, left, right) {
 };
 
 var randomizedQuickSort = function(arr) { return quickSort(arr, randomizedPartition); }
+
+var tailRecursiveQuickSort = function(arr, partitionFunction) {
+
+    var partitionFunction = partitionFunction == undefined ? partition : partitionFunction;
+    var arr = arr.slice(0);
+    var tailRecursiveQuickSortHelper = function(left, right) {
+        while (left < right) {
+            var pivot = partitionFunction(arr, left, right);
+            tailRecursiveQuickSortHelper(left, pivot - 1);
+            left = pivot + 1;
+        }
+    }
+    tailRecursiveQuickSortHelper(0, arr.length - 1);
+    return arr;
+}
+
+var randomizedTailRecursiveQuickSort = function(arr) { return tailRecursiveQuickSort(arr, randomizedPartition); }

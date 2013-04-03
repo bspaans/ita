@@ -424,6 +424,15 @@ test("I can run quick sort with another partition function", function() {
     ok(functionCalled);
 });
 
+test("I can partition an array with a random pivot", function() {
+
+    for (var i = 0; i < 100; i++) {
+        var randomArr = randomArray(i + 1, 1, 100);
+        var pivot = randomizedPartition(randomArr, 0, randomArr.length - 1);
+        ok(arrayIsPartitionedCorrectly(randomArr, pivot));
+    }
+});
+
 test("I can run quick sort with randomizedPartition and it will still work", function() {
 
     var arr = [2,8,7,1,3,5,6,4];
@@ -435,4 +444,37 @@ test("Randomized quick sort. Fuzz test", function() {
 
     fuzzTestSortFunction(randomizedQuickSort, 100, 100);
     fuzzTestSortFunction(randomizedQuickSort, 100, 101);
+});
+
+
+module("Introduction to Algorithms - chapter 7.4");
+
+test("Tail recursive quick sort", function() {
+
+    var arr = [2,8,7,1,3,5,6,4];
+    var sorted = tailRecursiveQuickSort(arr);
+    deepEqual(sorted, [1,2,3,4,5,6,7,8]);
+    
+    arr = [3,2,1];
+    sorted = tailRecursiveQuickSort(arr);
+    deepEqual(sorted, [1,2,3]);
+});
+
+test("Tail recursive quick sort. Fuzz test", function() {
+
+    fuzzTestSortFunction(tailRecursiveQuickSort, 100, 100);
+    fuzzTestSortFunction(tailRecursiveQuickSort, 100, 101);
+});
+
+test("I can run tail recursive quick sort with randomizedPartition and it will still work", function() {
+
+    var arr = [2,8,7,1,3,5,6,4];
+    var sorted = tailRecursiveQuickSort(arr, randomizedPartition);
+    deepEqual(sorted, [1,2,3,4,5,6,7,8]);
+});
+
+test("Tail recursive randomized quick sort. Fuzz test", function() {
+
+    fuzzTestSortFunction(randomizedTailRecursiveQuickSort, 100, 100);
+    fuzzTestSortFunction(randomizedTailRecursiveQuickSort, 100, 101);
 });
