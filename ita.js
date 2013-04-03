@@ -299,7 +299,9 @@ var randomizedPartition = function(arr, left, right) {
     return partition(arr, left, right);
 };
 
-var randomizedQuickSort = function(arr) { return quickSort(arr, randomizedPartition); }
+var randomizedQuickSort = function(arr) { 
+    return quickSort(arr, randomizedPartition); 
+}
 
 var tailRecursiveQuickSort = function(arr, partitionFunction) {
 
@@ -316,20 +318,28 @@ var tailRecursiveQuickSort = function(arr, partitionFunction) {
     return arr;
 };
 
-var randomizedTailRecursiveQuickSort = function(arr) { return tailRecursiveQuickSort(arr, randomizedPartition); }
+var randomizedTailRecursiveQuickSort = function(arr) { 
+    return tailRecursiveQuickSort(arr, randomizedPartition); 
+}
 
 
-var countingSort = function(arr, k) {
-    var result = new Array(arr.length);
-    var count = new Array(k + 1);
-    for (var i = -1 ; i <= k ; i++) {
+var countOccurencesOfValues = function(arr, k) {
+
+    var count = new Array(k);
+    for (var i = 0 ; i <= k ; i++) {
         count[i] = 0;
     }
 
     for (var i = 0; i < arr.length; i++) {
         count[arr[i]]++;
     }
-    // count[i] now contains the number of elements equal to i
+    return count;
+};
+
+var countingSort = function(arr, k) {
+    var result = new Array(arr.length);
+    var count = countOccurencesOfValues(arr, k);
+    count[-1] = 0;
 
     for (var i = 0; i <= k; i++) {
         count[i] += count[i - 1];

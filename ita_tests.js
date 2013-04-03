@@ -484,6 +484,21 @@ test("Tail recursive randomized quick sort. Fuzz test", function() {
 
 module("Introduction to Algorithms - chapter 8.2");
 
+test("I can count the occurences of a value in an array, when an array has values between 0 and k", function() {
+
+    var arr = [3,2,1,3,2,1];
+    var count = countOccurencesOfValues(arr, 3);
+    deepEqual(count, [0,2,2,2]);
+
+    var arr = [1,2,3,5,5];
+    var count = countOccurencesOfValues(arr, 5);
+    deepEqual(count, [0,1,1,1,0,2]);
+
+    var arr = [0,0,0];
+    var count = countOccurencesOfValues(arr, 0);
+    deepEqual(count, [3]);
+});
+
 test("Counting sort", function() {
 
     var arr = [3,2,1];
