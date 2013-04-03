@@ -59,3 +59,7 @@ Skipped:
 * Find minimum 
 * Randomized select 
 
+### Part III - Data Structures 
+
+* Stacks
+* Queues
