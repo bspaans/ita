@@ -100,7 +100,7 @@ test("I can multiply two square matrices", function() {
     deepEqual(result, [[3,6,9], [6,12,18], [9,18,27]])
 });
 
-module("Introduction to Algorithms - Part II - chapter 5.3");
+module("Introduction to Algorithms - Part I - chapter 5.3");
 
 test("I can permute an array by sorting, provided that all the random priorities are distinct", function() {
 
