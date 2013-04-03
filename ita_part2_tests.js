@@ -1,152 +1,4 @@
-module("Introduction to Algorithms - chapter 2.1");
-
-var fuzzTestSortFunction = function(sortFunction, nrOfRuns, nrOfElems) {
-
-    var nrOfElems = nrOfElems == undefined ? 100 : nrOfElems;
-    for (var i = 0; i < nrOfRuns; i++) {
-        var arr = Util.randomArray(nrOfElems, 0, 100);
-        var sorted = sortFunction(arr);
-        ok(Util.isSorted(sorted));
-    }
-};
-
-test("I can test that an array is sorted correctly", function() {
-
-    ok(Util.isSorted([1,2,3]));
-    ok(Util.isSorted([1,1,2,3]));
-    ok(Util.isSorted([]));
-    ok(!Util.isSorted([3,2,1]));
-    ok(!Util.isSorted([3,undefined,1]));
-    ok(!Util.isSorted([undefined,1]));
-});
-
-test("I can get a random integer in a given range", function() {
-
-    for (var i = 0; i < 50; i++) {
-        for (var j = i + 1; j < 50; j++) {
-            var rnd = Util.randRange(i, j);
-            ok(rnd >= i);
-            ok(rnd <= j);
-        }
-    }
-
-});
-
-test("I can create an array containing random numbers", function() {
-
-    var arraySize = 100;
-    var arrayMinValue = 99;
-    var arrayMaxValue = 100;
-    var randomArr = Util.randomArray(arraySize, arrayMinValue, arrayMaxValue);
-
-    equal(randomArr.length, arraySize);
-    for (var i = 0; i < arraySize; i++) {
-        ok(randomArr[i] >= arrayMinValue && randomArr[i] <= arrayMaxValue);
-    }
-});
-
-test("Insertion sort", function() {
-
-    var arr = [3,2,1]
-    var sorted = insertionSort(arr);
-    deepEqual(sorted, [1,2,3]);
-});
-
-test("Insertion sort fuzz test", function() {
-
-    fuzzTestSortFunction(insertionSort, 100, 100);
-    fuzzTestSortFunction(insertionSort, 100, 101);
-});
-
-
-module("Introduction to Algorithms - chapter 2.3");
-
-test("Merge sort", function() {
-
-    var arr = [3,2,1]
-    var sorted = mergeSort(arr);
-    deepEqual(sorted, [1,2,3]);
-});
-
-test("Merge sort fuzz test", function() {
-
-    fuzzTestSortFunction(mergeSort, 100, 100);
-    fuzzTestSortFunction(mergeSort, 100, 101);
-});
-
-test("Bubble sort", function() {
-
-    var arr = [3,2,1]
-    var sorted = bubbleSort(arr);
-    deepEqual(sorted, [1,2,3]);
-});
-
-test("Bubble sort fuzz test", function() {
-
-    fuzzTestSortFunction(bubbleSort, 100, 100);
-    fuzzTestSortFunction(bubbleSort, 100, 101);
-});
-
-
-module("Introduction to Algorithms - chapter 4.1");
-
-test("I can find the max crossing sub array", function() {
-
-    var arr = [1,5,4]
-    var result = findMaxCrossingSubArray(arr, 0, 1, 2)
-    equal(result.maxLeft, 0);
-    equal(result.maxRight, 2);
-    equal(result.sum, 10);
-
-    arr = [-1, 1, 5, 4, -1]
-    result = findMaxCrossingSubArray(arr, 0, 2, 4)
-    equal(result.maxLeft, 1);
-    equal(result.maxRight, 3);
-    equal(result.sum, 10);
-
-    arr = [1,5]
-    result = findMaxCrossingSubArray(arr, 0, 0, 1)
-    equal(result.maxLeft, 0);
-    equal(result.maxRight, 1);
-    equal(result.sum, 6);
-});
-
-test("I can't find the max crossing sub array if the given indices are nonsensical", function() {
-
-    throws(function() { findMaxCrossingSubArray([1], 0, 0, 0)}, /^Array should have at least two elements/);
-    throws(function() { findMaxCrossingSubArray([1,2], 0, 1, 1)}, /^Mid should be lower than high$/);
-    throws(function() { findMaxCrossingSubArray([1,2], 0, -1, 1)}, /^Mid should be equal to or higher than low$/);
-    throws(function() { findMaxCrossingSubArray([1,2], 0, 0, 2)}, /^Indices should be in range$/);
-    throws(function() { findMaxCrossingSubArray([1,2], -1, 0, 1)}, /^Indices should be in range$/);
-});
-
-test("I can find the maximum sub array", function() {
-
-    var arr = [-1, 1, 2, 3, -1];
-    var result = findMaxSubArray(arr);
-    equal(result.maxLeft, 1);
-    equal(result.maxRight, 3);
-    equal(result.sum, 6);
-
-    // figure 4.3
-    arr = [13, -3, -25, 20, -3, -16, -23, 18, 20, -7, 12, -5, -22, 15, -4, 7]
-    result = findMaxSubArray(arr);
-    equal(result.maxLeft, 7);
-    equal(result.maxRight, 10);
-    equal(result.sum, 43);
-});
-
-test("I can multiply two square matrices", function() {
-
-    var matrixA = [[1,1,1],[2,2,2], [3,3,3]]
-    var matrixB = [[1,2,3],[1,2,3], [1,2,3]]
-    var result = squareMatrixMultiply(matrixA, matrixB);
-    deepEqual(result, [[3,6,9], [6,12,18], [9,18,27]])
-});
-
-module("Introduction to Algorithms - chapter 5.3");
-
-
+module("Introduction to Algorithms - Part II - chapter 5.3");
 
 test("I can permute an array by sorting, provided that all the random priorities are distinct", function() {
 
@@ -184,7 +36,6 @@ test("I can permute an array by sorting, provided that all the random priorities
     }
 });
 
-
 test("I can permute an array by randomizing in place", function() {
 
     var arr = [2,5,1,8,9]
@@ -211,35 +62,32 @@ test("I can permute an array by randomizing in place. Fuzz test.", function() {
 });
 
 
-module("Introduction to Algorithms - chapter 6.1", {
-    setup: function() { this.heap = new Heap([16, 14, 10, 8, 7, 9, 3, 2, 4, 1]); }
-});
+module("Introduction to Algorithms - Part II - chapter 6.1");
 
 test("I can navigate a heap", function() {
 
-    equal(this.heap.parent(1), 0);
-    equal(this.heap.parent(2), 0);
-    equal(this.heap.parent(3), 1);
-    equal(this.heap.parent(4), 1);
-    equal(this.heap.parent(5), 2);
-    equal(this.heap.parent(6), 2);
+    heap = new Heap([16, 14, 10, 8, 7, 9, 3, 2, 4, 1]); 
+    equal(heap.parent(1), 0);
+    equal(heap.parent(2), 0);
+    equal(heap.parent(3), 1);
+    equal(heap.parent(4), 1);
+    equal(heap.parent(5), 2);
+    equal(heap.parent(6), 2);
 
-    equal(this.heap.left(0), 1);
-    equal(this.heap.left(1), 3);
-    equal(this.heap.left(2), 5);
-    equal(this.heap.left(3), 7);
-    equal(this.heap.left(4), 9);
+    equal(heap.left(0), 1);
+    equal(heap.left(1), 3);
+    equal(heap.left(2), 5);
+    equal(heap.left(3), 7);
+    equal(heap.left(4), 9);
 
-    equal(this.heap.right(0), 2);
-    equal(this.heap.right(1), 4);
-    equal(this.heap.right(2), 6);
-    equal(this.heap.right(3), 8);
+    equal(heap.right(0), 2);
+    equal(heap.right(1), 4);
+    equal(heap.right(2), 6);
+    equal(heap.right(3), 8);
 });
 
 
-module("Introduction to Algorithms - chapter 6.2", {
-    setup: function() { this.heap = new Heap([16, 14, 10, 8, 7, 9, 3, 2, 4, 1]); }
-});
+module("Introduction to Algorithms - Part II - chapter 6.2");
 
 var checkMaxHeapProperty = function(heap) {
     for (var i = 0; i < heap.length; i++) {
@@ -252,18 +100,19 @@ var checkMaxHeapProperty = function(heap) {
 
 test("The heap maintains the max-heap property", function() {
 
-    ok(checkMaxHeapProperty(this.heap));
-    this.heap.array[2] = 0;
-    this.heap.maxHeapify(2);
-    ok(checkMaxHeapProperty(this.heap));
+    heap = new Heap([16, 14, 10, 8, 7, 9, 3, 2, 4, 1]); 
+    ok(checkMaxHeapProperty(heap));
+    heap.array[2] = 0;
+    heap.maxHeapify(2);
+    ok(checkMaxHeapProperty(heap));
 
-    this.heap.array[1] = 0;
-    this.heap.maxHeapify(1);
-    ok(checkMaxHeapProperty(this.heap));
+    heap.array[1] = 0;
+    heap.maxHeapify(1);
+    ok(checkMaxHeapProperty(heap));
 });
 
 
-module("Introduction to Algorithms - chapter 6.3");
+module("Introduction to Algorithms - Part II - chapter 6.3");
 
 test("I can build a heap", function() {
 
@@ -279,7 +128,7 @@ test("I can build a heap", function() {
 });
 
 
-module("Introduction to Algorithms - chapter 6.4");
+module("Introduction to Algorithms - Part II - chapter 6.4");
 
 test("I can heap sort", function() {
 
@@ -298,7 +147,7 @@ test("Heap sort fuzz test", function() {
 });
 
 
-module("Introduction to Algorithms - chapter 6.5");
+module("Introduction to Algorithms - Part II - chapter 6.5");
 
 test("I can create a max priority queue", function() {
 
@@ -362,7 +211,7 @@ test("I can insert a new element into the priority queue, while maintaining the 
 });
 
 
-module("Introduction to Algorithms - chapter 7.1");
+module("Introduction to Algorithms - Part II - chapter 7.1");
 
 var arrayIsPartitionedCorrectly = function(arr, pivot) {
     for (var i = 0; i < arr.length; i++) {
@@ -413,7 +262,7 @@ test("Quick sort. Fuzz test", function() {
 });
 
 
-module("Introduction to Algorithms - chapter 7.3");
+module("Introduction to Algorithms - Part II - chapter 7.3");
 
 test("I can run quick sort with another partition function", function() {
 
@@ -449,7 +298,7 @@ test("Randomized quick sort. Fuzz test", function() {
 });
 
 
-module("Introduction to Algorithms - chapter 7.4");
+module("Introduction to Algorithms - Part II - chapter 7.4");
 
 test("Tail recursive quick sort", function() {
 
@@ -482,7 +331,7 @@ test("Tail recursive randomized quick sort. Fuzz test", function() {
 });
 
 
-module("Introduction to Algorithms - chapter 8.2");
+module("Introduction to Algorithms - Part II - chapter 8.2");
 
 test("I can count the occurences of a value in an array, when an array has values between 0 and k", function() {
 
@@ -514,7 +363,7 @@ test("Counting sort. Fuzz test", function() {
 });
 
 
-module("Introduction to Algorithms - chapter 8.4");
+module("Introduction to Algorithms - Part II - chapter 8.4");
 
 test("I can distribute the values in an array into buckets, provided that the values are in range [0, 1)", function() {
 
@@ -545,19 +394,6 @@ test("Bucket sort", function() {
     var sorted = bucketSort(arr);
     ok(Util.isSorted(sorted));
     deepEqual(sorted, [0.12, 0.17, 0.21, 0.23, 0.26, 0.39, 0.68, 0.72, 0.78, 0.94]);
-});
-
-test("I can create an array containing random doubles", function() {
-
-    var arraySize = 100;
-    var arrayMinValue = 2.0;
-    var arrayMaxValue = 3.0;
-    var randomArr = Util.randomDoubleArray(arraySize, arrayMinValue, arrayMaxValue);
-
-    equal(randomArr.length, arraySize);
-    for (var i = 0; i < arraySize; i++) {
-        ok(randomArr[i] >= arrayMinValue && randomArr[i] <= arrayMaxValue);
-    }
 });
 
 test("Bucket sort. Fuzz test", function() {
