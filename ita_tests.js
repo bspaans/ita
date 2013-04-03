@@ -512,3 +512,59 @@ test("Counting sort. Fuzz test", function() {
     fuzzTestSortFunction(cSort, 100, 100);
     fuzzTestSortFunction(cSort, 100, 101);
 });
+
+
+module("Introduction to Algorithms - chapter 8.4");
+
+test("I can distribute the values in an array into buckets, provided that the values are in range [0, 1)", function() {
+
+    // figure 8.4
+    var arr = [0.78, 0.17, 0.39, 0.26, 0.72, 0.94, 0.21, 0.12, 0.23, 0.68];
+    var bucketed = distributeOverBuckets(arr);
+    deepEqual(bucketed, [[], [0.17, 0.12], [0.26, 0.21, 0.23], [0.39], [], [], [0.68], [0.78, 0.72], [], [0.94]]);
+
+    var arr = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9];
+    var bucketed = distributeOverBuckets(arr);
+    deepEqual(bucketed, [[0.1],[0.2],[0.3],[0.4],[0.5],[0.6],[0.7],[0.8],[0.9]]);
+
+});
+
+test("I can sort the buckets", function() {
+
+    // figure 8.4
+    var arr = [0.78, 0.17, 0.39, 0.26, 0.72, 0.94, 0.21, 0.12, 0.23, 0.68];
+    var bucketed = distributeOverBuckets(arr);
+    var sortedBuckets = sortBuckets(bucketed);
+    deepEqual(sortedBuckets, [[], [0.12, 0.17], [0.21, 0.23, 0.26], [0.39], [], [], [0.68], [0.72, 0.78], [], [0.94]]);
+});
+
+test("Bucket sort", function() {
+
+    // figure 8.4
+    var arr = [0.78, 0.17, 0.39, 0.26, 0.72, 0.94, 0.21, 0.12, 0.23, 0.68];
+    var sorted = bucketSort(arr);
+    ok(Util.isSorted(sorted));
+    deepEqual(sorted, [0.12, 0.17, 0.21, 0.23, 0.26, 0.39, 0.68, 0.72, 0.78, 0.94]);
+});
+
+test("I can create an array containing random doubles", function() {
+
+    var arraySize = 100;
+    var arrayMinValue = 2.0;
+    var arrayMaxValue = 3.0;
+    var randomArr = Util.randomDoubleArray(arraySize, arrayMinValue, arrayMaxValue);
+
+    equal(randomArr.length, arraySize);
+    for (var i = 0; i < arraySize; i++) {
+        ok(randomArr[i] >= arrayMinValue && randomArr[i] <= arrayMaxValue);
+    }
+});
+
+test("Bucket sort. Fuzz test", function() {
+
+    for (var i = 0; i < 100; i++) {
+        var arr = Util.randomDoubleArray(i, 0.0, 1.0);
+        var sorted = bucketSort(arr);
+        ok(Util.isSorted(sorted));
+    }
+});

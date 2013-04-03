@@ -352,3 +352,37 @@ var countingSort = function(arr, k) {
     }
     return result;
 };
+
+
+var distributeOverBuckets = function(arr) {
+
+    var n = arr.length;
+    var result = new Array(n);
+
+    for (var i = 0; i < n; i++) {
+        result[i] = [];
+    }
+
+    for (var i = 0; i < n; i++) {
+        var index = Math.floor(n * arr[i]);
+        result[index].push(arr[i]);
+    }
+    return result;
+};
+
+var sortBuckets = function(buckets) {
+    for (var i = 0; i < buckets.length; i++) {
+        buckets[i] = insertionSort(buckets[i]);
+    }
+    return buckets;
+};
+
+var bucketSort = function(arr) {
+    var buckets = sortBuckets(distributeOverBuckets(arr));
+    var sorted = [];
+    for (var i = 0; i < buckets.length; i++) {
+        sorted = sorted.concat(buckets[i]);
+
+    }
+    return sorted;
+}

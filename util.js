@@ -21,6 +21,15 @@ Util.randomArray = function(n, min, max) {
     return arr;
 };
 
+Util.randomDoubleArray = function(n, min, max) {
+
+    var arr = new Array(n);
+    for (var i = 0; i < n; i++) {
+        arr[i] = Math.random() * (max - min) + min;
+    }
+    return arr;
+};
+
 
 Util.randRange = function(min, max) {
 
