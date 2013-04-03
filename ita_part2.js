@@ -186,7 +186,6 @@ var countingSort = function(arr, k) {
     for (var i = 0; i <= k; i++) {
         count[i] += count[i - 1];
     }
-    // count[i] now contains the number of elements less than or equal to i
 
     for (var i = arr.length - 1; i >= 0; i--) {
         result[count[arr[i]] - 1] = arr[i];
@@ -227,4 +226,38 @@ var bucketSort = function(arr) {
 
     }
     return sorted;
-}
+};
+
+
+var minimum = function(arr) {
+
+    if (arr.length == 0) {
+        throw "Array needs to be non-empty";
+    }
+
+    var min = arr[0];
+    for (var i = 1; i < arr.length; i++) {
+        min = arr[i] < min ? arr[i] : min;
+    }
+    return min;
+};
+
+var randomizedSelect = function(arr, i) {
+
+    var randomizedSelectHelper = function(left, right, i) {
+        if (left == right) {
+            return arr[left];
+        }
+        var pivot = randomizedPartition(arr, left, right);
+        var k = pivot - left + 1;
+        if (i == k) {
+            return arr[pivot];
+        }
+        else if (i < k) {
+            return randomizedSelectHelper(left, pivot - 1, i);
+        }
+        return randomizedSelectHelper(pivot + 1, right, i - k);
+
+    };
+    return randomizedSelectHelper(0, arr.length - 1, i);
+};

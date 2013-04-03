@@ -404,3 +404,41 @@ test("Bucket sort. Fuzz test", function() {
         ok(Util.isSorted(sorted));
     }
 });
+
+
+module("Introduction to Algorithms - Part II - chapter 9.1");
+
+test("I can find the minimum value of an array", function() {
+
+    var arr = [9,8,7,6,5,4,5,6];
+    var min = minimum(arr);
+    equal(min, 4);
+
+    var arr = [9,8,7,6,5,4,5,6, -1];
+    var min = minimum(arr);
+    equal(min, -1);
+
+    var arr = [1,2,3,4,5];
+    equal(minimum(arr), 1);
+});
+
+test("I can't find the minimum of an empty array", function() {
+
+    throws(function() { minimum([]); }, /Array needs to be non-empty/);
+});
+
+
+module("Introduction to Algorithms - Part II - chapter 9.2");
+
+test("I can select the i-th order statistic of an array containing distinct numbers", function() {
+
+    var arr = [1,2,3,4,5];
+    equal(randomizedSelect(arr, 2), 2);
+    equal(randomizedSelect(arr, 1), minimum(arr));
+
+    for (var i = 1; i <= 5; i++) {
+        equal(randomizedSelect(arr, i), i);
+    }
+});
+
+
