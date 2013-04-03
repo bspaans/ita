@@ -1,35 +1,3 @@
-
-var isSorted = function(arr) {
-
-    var last;
-    for (var i = 0; i < arr.length; i++) {
-        if (last != undefined && arr[i] < last) {
-            return false;
-        }
-        last = arr[i];
-    }
-    return true;
-};
-
-var randomArray = function(n, min, max) {
-
-    var arr = new Array(n);
-    for (var i = 0; i < n; i++) {
-        arr[i] = randRange(min, max);
-    }
-    return arr;
-};
-
-var randRange = function(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-};
-
-var swapVariables = function(arr, i, j) {
-    var tmp = arr[i];
-    arr[i] = arr[j];
-    arr[j] = tmp;
-};
-
 var insertionSort = function(arr) {
 
     var arr = arr.slice(0);
@@ -91,7 +59,7 @@ var bubbleSort = function(arr) {
     for (var i = 0; i < arr.length ; i++) {
         for (var j = arr.length - 1; j > i; j--) {
             if (arr[j] < arr[j - 1]) {
-                swapVariables(arr, j, j - 1);
+                Util.swapVariables(arr, j, j - 1);
             }
         }
     }
@@ -206,7 +174,7 @@ var randomizeArrayInPlace = function(randomFunction, arr) {
     var n = arr.length - 1;
     for (var i = 0; i <= n; i++) {
         var rnd = Math.floor(randomFunction() * (n - i)) + i;
-        swapVariables(arr, i, rnd);
+        Util.swapVariables(arr, i, rnd);
     }
     return arr;
 };
@@ -233,7 +201,7 @@ var Heap = function(heapArray) {
         largest = (l < self.length && self.array[l] > self.array[index]  ) ? l : largest;
         largest = (r < self.length && self.array[r] > self.array[largest]) ? r : largest;
         if (largest != index) {
-            swapVariables(self.array, index, largest);
+            Util.swapVariables(self.array, index, largest);
             self.maxHeapify(largest);
         }
     };
@@ -248,7 +216,7 @@ var Heap = function(heapArray) {
         var arr = arr.slice(0);
         self.buildMaxHeap(arr);
         for (var i = arr.length - 1; i >= 1; i--) {
-            swapVariables(arr, 0, i);
+            Util.swapVariables(arr, 0, i);
             self.length--;
             self.maxHeapify(0);
         }
@@ -281,7 +249,7 @@ var PriorityQueue = function(queue) {
         }
         heap.array[index] = key;
         while (index > 0 && heap.array[heap.parent(index)] < heap.array[index]) {
-            swapVariables(heap.array, index, heap.parent(index));
+            Util.swapVariables(heap.array, index, heap.parent(index));
             index = heap.parent(index);
         }
     };
@@ -302,10 +270,10 @@ var partition = function(arr, left, right) {
     for (var j = left; j < right; j++) {
         if (arr[j] < x) {
             i++;
-            swapVariables(arr, i, j);
+            Util.swapVariables(arr, i, j);
         }
     }
-    swapVariables(arr, i + 1, right);
+    Util.swapVariables(arr, i + 1, right);
     return i + 1;
 };
 
@@ -326,8 +294,8 @@ var quickSort = function(arr, partitionFunction) {
 };
 
 var randomizedPartition = function(arr, left, right) {
-    var pivot = randRange(left, right);
-    swapVariables(arr, pivot, right);
+    var pivot = Util.randRange(left, right);
+    Util.swapVariables(arr, pivot, right);
     return partition(arr, left, right);
 };
 

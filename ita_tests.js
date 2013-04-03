@@ -4,25 +4,27 @@ var fuzzTestSortFunction = function(sortFunction, nrOfRuns, nrOfElems) {
 
     var nrOfElems = nrOfElems == undefined ? 100 : nrOfElems;
     for (var i = 0; i < nrOfRuns; i++) {
-        var arr = randomArray(nrOfElems, 0, 100);
+        var arr = Util.randomArray(nrOfElems, 0, 100);
         var sorted = sortFunction(arr);
-        ok(isSorted(sorted));
+        ok(Util.isSorted(sorted));
     }
 };
 
 test("I can test that an array is sorted correctly", function() {
 
-    ok(isSorted([1,2,3]));
-    ok(isSorted([1,1,2,3]));
-    ok(isSorted([]));
-    ok(!isSorted([3,2,1]));
+    ok(Util.isSorted([1,2,3]));
+    ok(Util.isSorted([1,1,2,3]));
+    ok(Util.isSorted([]));
+    ok(!Util.isSorted([3,2,1]));
+    ok(!Util.isSorted([3,undefined,1]));
+    ok(!Util.isSorted([undefined,1]));
 });
 
 test("I can get a random integer in a given range", function() {
 
     for (var i = 0; i < 50; i++) {
         for (var j = i + 1; j < 50; j++) {
-            var rnd = randRange(i, j);
+            var rnd = Util.randRange(i, j);
             ok(rnd >= i);
             ok(rnd <= j);
         }
@@ -35,7 +37,7 @@ test("I can create an array containing random numbers", function() {
     var arraySize = 100;
     var arrayMinValue = 99;
     var arrayMaxValue = 100;
-    var randomArr = randomArray(arraySize, arrayMinValue, arrayMaxValue);
+    var randomArr = Util.randomArray(arraySize, arrayMinValue, arrayMaxValue);
 
     equal(randomArr.length, arraySize);
     for (var i = 0; i < arraySize; i++) {
@@ -174,7 +176,7 @@ test("I can permute an array by sorting, provided that all the random priorities
 test("I can permute an array by sorting, provided that all the random priorities are distinct. Fuzz test", function() {
 
     for (var i = 0; i < 100; i++) {
-        var randomArr = randomArray(100, 1, 100);
+        var randomArr = Util.randomArray(100, 1, 100);
         var permutedArr = permuteArrayBySorting(Math.random, randomArr);
         if (randomArr.length == permutedArr.length) {
             notDeepEqual(randomArr, permutedArr);
@@ -201,7 +203,7 @@ test("I can permute an array by randomizing in place", function() {
 test("I can permute an array by randomizing in place. Fuzz test.", function() {
 
     for (var i = 0; i < 100; i++) {
-        var randomArr = randomArray(100, 1, 100);
+        var randomArr = Util.randomArray(100, 1, 100);
         var permutedArr = randomizeArrayInPlace(Math.random, randomArr);
         equal(randomArr.length, permutedArr.length);
         notDeepEqual(randomArr, permutedArr);
@@ -284,7 +286,7 @@ test("I can heap sort", function() {
     var arr = [3,1,6,3,8];
     var heap = new Heap();
     var sorted = heap.heapSort(arr);
-    ok(isSorted(sorted));
+    ok(Util.isSorted(sorted));
     ok(checkMaxHeapProperty(heap));
 });
 
@@ -387,7 +389,7 @@ test("I can partition an array", function() {
 test("I can partition an array. Fuzz test", function() {
 
     for (var i = 0; i < 100; i++) {
-        var randomArr = randomArray(i + 1, 1, 100);
+        var randomArr = Util.randomArray(i + 1, 1, 100);
         var pivot = partition(randomArr, 0, randomArr.length - 1);
         ok(arrayIsPartitionedCorrectly(randomArr, pivot));
     }
@@ -424,10 +426,10 @@ test("I can run quick sort with another partition function", function() {
     ok(functionCalled);
 });
 
-test("I can partition an array with a random pivot", function() {
+test("I can partition an array with a random pivot. Fuzz test.", function() {
 
     for (var i = 0; i < 100; i++) {
-        var randomArr = randomArray(i + 1, 1, 100);
+        var randomArr = Util.randomArray(i + 1, 1, 100);
         var pivot = randomizedPartition(randomArr, 0, randomArr.length - 1);
         ok(arrayIsPartitionedCorrectly(randomArr, pivot));
     }
