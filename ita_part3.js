@@ -53,7 +53,7 @@ var Queue = function(size) {
 };
 
 
-var LinkedList = function(key, head) {
+var LinkedList = function(elem, head) {
 
     var LinkedListHead = function() {
         this.item = null;
@@ -61,7 +61,8 @@ var LinkedList = function(key, head) {
     }
 
     var self = this;
-    self.key = key == undefined ? null : key;
+    self.key = elem == undefined ? null : (elem.key != undefined ? elem.key : elem);
+    self.data = elem != undefined &&  elem.key != undefined ? elem : null;
     self.headPointer = null;
     self.next = null;
     
@@ -91,8 +92,14 @@ var LinkedList = function(key, head) {
         return x;
     }
 
+    self.searchForData = function(elem) {
+        var elem = self.search(elem);
+        return elem == null ? null : elem.data;
+    }
+
     self.delete = function(elem) {
-        var x = self.search(elem);
+        var key = elem.key == undefined ? elem : elem.key;
+        var x = self.search(key);
         return self.deleteLinkedList(x);
     }
 
@@ -137,7 +144,8 @@ var DoublyLinkedList = function(x) {
     }
 
     self.delete = function(elem) {
-        var x = self.search(elem);
+        var key = elem.key == undefined ? elem : elem.key;
+        var x = self.search(key);
         if (x == null) {
             return 0;
         }
@@ -189,7 +197,7 @@ var HashMap = function(size) {
 
     var self = new DirectAddressTable(size);
     for (var i = 0; i < self.array.length; i++) {
-        self.array[i] = [];
+        self.array[i] = new DoublyLinkedList();
     }
     
     self.hashFunction = function(n) {
@@ -197,19 +205,15 @@ var HashMap = function(size) {
     }
 
     self.insert = function(elem) {
-        self.array[self.hashFunction(elem.key)].push(elem);
+        self.array[self.hashFunction(elem.key)].insert(elem);
     }
 
     self.search = function(key) {
-        var elems = self.array[self.hashFunction(key)];
-        var x = $.grep(elems, function(e) { return e.key == key});
-        return x == null ? null : x[0];
+        return self.array[self.hashFunction(key)].searchForData(key);
     }
 
     self.delete = function(elem) {
-        var h = self.hashFunction(elem.key);
-        var elems = self.array[h];
-        self.array[h] = $.grep(elems, function(e) { return e != elem; });
+        self.array[self.hashFunction(elem.key)].delete(elem);
     }
 
     return self;

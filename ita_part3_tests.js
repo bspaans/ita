@@ -92,6 +92,7 @@ test("I can insert a value into a linked list, and keep head and next attributes
     equal(item2.next.next.key, null);
 });
 
+
 test("I can insert on any instance of a singly linked list, but the element will always be added at the head", function() {
 
     var ll = new LinkedList();
@@ -136,6 +137,74 @@ test("I can delete an item from a linked list", function() {
     equal(ll.delete(5), 0);
     equal(ll.delete(6), 1);
     equal(ll.search(6), null);
+});
+
+test("I can insert objects with a key into a linked list, and query on key to get back that data", function() {
+
+    var item1 = {key: 1, value: "first"};
+    var item2 = {key: 2, value: "second"};
+    var item3 = {key: 3, value: "third"};
+
+    var ll = new LinkedList();
+    var ll1 = ll.insert(item1);
+    var ll2 = ll.insert(item2);
+    var ll3 = ll.insert(item3);
+
+    equal(ll.search(1), ll1);
+    equal(ll.search(2), ll2);
+    equal(ll.search(3), ll3);
+
+    equal(ll.search(1).data, item1);
+    equal(ll.search(2).data, item2);
+    equal(ll.search(3).data, item3);
+});
+
+test("I can delete objects that have a key", function() {
+
+    var item1 = {key: 1, value: "first"};
+    var item2 = {key: 2, value: "second"};
+    var item3 = {key: 3, value: "third"};
+
+    var ll = new LinkedList();
+    var ll1 = ll.insert(item1);
+    var ll2 = ll.insert(item2);
+    var ll3 = ll.insert(item3);
+
+    equal(ll.search(1), ll1);
+    equal(ll.search(2), ll2);
+    equal(ll.search(3), ll3);
+
+    ll.delete(item1);
+    ll.delete(item2);
+    ll.delete(item3);
+
+    equal(ll.search(1), null);
+    equal(ll.search(2), null);
+    equal(ll.search(3), null);
+});
+
+test("I can delete objects on key", function() {
+
+    var item1 = {key: 1, value: "first"};
+    var item2 = {key: 2, value: "second"};
+    var item3 = {key: 3, value: "third"};
+
+    var ll = new LinkedList();
+    var ll1 = ll.insert(item1);
+    var ll2 = ll.insert(item2);
+    var ll3 = ll.insert(item3);
+
+    equal(ll.search(1), ll1);
+    equal(ll.search(2), ll2);
+    equal(ll.search(3), ll3);
+
+    ll.delete(1);
+    ll.delete(2);
+    ll.delete(3);
+
+    equal(ll.search(1), null);
+    equal(ll.search(2), null);
+    equal(ll.search(3), null);
 });
 
 test("I can insert a value into a doubly linked list, and keep head, next and prev attributes in a correct state", function() {
@@ -200,6 +269,73 @@ test("I can delete an item from a doubly linked list", function() {
     equal(ll.search(6), null);
 });
 
+test("I can insert objects with a key into a doubly linked list, and query on key to get back that data", function() {
+
+    var item1 = {key: 1, value: "first"};
+    var item2 = {key: 2, value: "second"};
+    var item3 = {key: 3, value: "third"};
+
+    var ll = new DoublyLinkedList();
+    var ll1 = ll.insert(item1);
+    var ll2 = ll.insert(item2);
+    var ll3 = ll.insert(item3);
+
+    equal(ll.search(1), ll1);
+    equal(ll.search(2), ll2);
+    equal(ll.search(3), ll3);
+
+    equal(ll.search(1).data, item1);
+    equal(ll.search(2).data, item2);
+    equal(ll.search(3).data, item3);
+});
+
+test("I can delete objects that have a key", function() {
+
+    var item1 = {key: 1, value: "first"};
+    var item2 = {key: 2, value: "second"};
+    var item3 = {key: 3, value: "third"};
+
+    var ll = new DoublyLinkedList();
+    var ll1 = ll.insert(item1);
+    var ll2 = ll.insert(item2);
+    var ll3 = ll.insert(item3);
+
+    equal(ll.search(1), ll1);
+    equal(ll.search(2), ll2);
+    equal(ll.search(3), ll3);
+
+    ll.delete(item1);
+    ll.delete(item2);
+    ll.delete(item3);
+
+    equal(ll.search(1), null);
+    equal(ll.search(2), null);
+    equal(ll.search(3), null);
+});
+
+test("I can delete objects on key", function() {
+
+    var item1 = {key: 1, value: "first"};
+    var item2 = {key: 2, value: "second"};
+    var item3 = {key: 3, value: "third"};
+
+    var ll = new DoublyLinkedList();
+    var ll1 = ll.insert(item1);
+    var ll2 = ll.insert(item2);
+    var ll3 = ll.insert(item3);
+
+    equal(ll.search(1), ll1);
+    equal(ll.search(2), ll2);
+    equal(ll.search(3), ll3);
+
+    ll.delete(1);
+    ll.delete(2);
+    ll.delete(3);
+
+    equal(ll.search(1), null);
+    equal(ll.search(2), null);
+    equal(ll.search(3), null);
+});
 
 module("Introduction to Algorithms - Part III - chapter 11.1");
 
