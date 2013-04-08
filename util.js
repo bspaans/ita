@@ -43,3 +43,45 @@ Util.swapVariables = function(arr, i, j) {
     arr[i] = arr[j];
     arr[j] = tmp;
 };
+
+Util.getMean = function(arr) {
+
+    var sum = 0;
+    for (var i = 0; i < arr.length; i++) {
+        sum += arr[i];
+    }
+    return sum / arr.length;
+};
+
+Util.getVariance = function(arr, mean) {
+
+    var mean = mean == undefined ? Util.getMean(arr) : mean;
+    var absDiffSum = 0;
+    for (var i = 0; i < arr.length; i++) {
+        absDiffSum += Math.pow(Math.abs(arr[i] - mean), 2);
+    }
+    return absDiffSum / arr.length;
+}
+
+Util.getStandardDeviation = function(arr, mean) {
+    return Math.sqrt(Util.getVariance(arr, mean));
+}
+
+Util.getStatistics = function(arr, mean, predictedMean) {
+    var statistics = {};
+    statistics.mean = mean == undefined ? Util.getMean(arr) : mean;
+    statistics.variance = Util.getVariance(arr, statistics.mean);
+    statistics.standardDeviation = Math.sqrt(statistics.variance);
+
+    if (predictedMean != undefined) {
+        statistics.distanceFromPredictionInStdDevs = 
+            Util.getDistanceFromPredictedMeanInStandardDeviations(statistics.mean, predictedMean, statistics.standardDeviation);
+    }
+    return statistics;
+}
+
+Util.getDistanceFromPredictedMeanInStandardDeviations = function(mean, predictedMean, stddev) {
+    var distance = Math.abs(predictedMean - mean);
+    return distance / stddev;
+
+};

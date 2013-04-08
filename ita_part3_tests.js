@@ -207,6 +207,22 @@ test("I can delete objects on key", function() {
     equal(ll.search(3), null);
 });
 
+test("I can get the size of singly linked list", function() {
+
+    var ll = new LinkedList();
+    equal(ll.size(), 0);
+
+    var ll1 = ll.insert(100);
+    equal(ll.size(), 1);
+    var ll2 = ll.insert(200);
+    equal(ll.size(), 2);
+    var ll3 = ll.insert(300);
+    equal(ll.size(), 3);
+
+    ll.delete(100);
+    equal(ll.size(), 2);
+});
+
 test("I can insert a value into a doubly linked list, and keep head, next and prev attributes in a correct state", function() {
 
     var ll = new DoublyLinkedList();
@@ -335,6 +351,22 @@ test("I can delete objects on key", function() {
     equal(ll.search(1), null);
     equal(ll.search(2), null);
     equal(ll.search(3), null);
+});
+
+test("I can get the size of a doubly linked list", function() {
+
+    var ll = new DoublyLinkedList();
+    equal(ll.size(), 0);
+
+    var ll1 = ll.insert(100);
+    equal(ll.size(), 1);
+    var ll2 = ll.insert(200);
+    equal(ll.size(), 2);
+    var ll3 = ll.insert(300);
+    equal(ll.size(), 3);
+
+    ll.delete(100);
+    equal(ll.size(), 2);
 });
 
 module("Introduction to Algorithms - Part III - chapter 11.1");
@@ -519,4 +551,40 @@ test("Hash tables passes the sanity checks", function() {
 
     sanityTestDictionary(new HashTable());
     fuzzTestDictionary(new HashTable());
+});
+
+test("A hash table distributes items in roughly equally sized buckets", function() {
+
+    var arrays = 10;
+    var idealTestItemsPerSlot = 11;
+    var generateItems = arrays * idealTestItemsPerSlot - 2;
+
+    var unit = new HashTable(arrays);
+    for (var i = 0; i < arrays; i++) {
+        equal(unit.array[i].size(), 0);
+    }
+
+    for (var i = 0; i < generateItems; i++) {
+        unit.insert({key: i});
+    }
+
+    var size = 0;
+    for (var i = 0; i < arrays; i++) {
+        size += unit.array[i].size();
+    }
+    equal(size, generateItems, "Size should work");
+
+
+    var dataset = [];
+    for (var i = 0; i < arrays; i++) {
+        dataset[i] = unit.array[i].size();
+    }
+
+    var statistics = Util.getStatistics(dataset, undefined, idealTestItemsPerSlot);
+    ok(Math.abs(statistics.mean - idealTestItemsPerSlot) < 1, "Mean should be no more than 1 away from ideal");
+    ok(statistics.variance < 1, "Variance should be smaller than 1");
+    ok(statistics.standardDeviation < 1, "Standard deviation should be smaller than one");
+    ok(statistics.distanceFromPredictionInStdDevs <= 0.5);
+
+    console.log(statistics);
 });

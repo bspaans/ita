@@ -57,6 +57,7 @@ var LinkedList = function(elem, head) {
 
     var LinkedListHead = function() {
         this.item = null;
+        this.size = 0;
         return this;
     }
 
@@ -75,12 +76,20 @@ var LinkedList = function(elem, head) {
         self.headPointer.item = newHead;
     }
 
+    self.incrementSize = function() {
+        self.headPointer.size++;
+    }
+    self.decrementSize = function() {
+        self.headPointer.size--;
+    }
+
     self.insert = function(elem) {
         var x = new LinkedList(elem);
         x.next = self.head();
         x.next = x.next == null ? self : x.next;
         self.updateHead(x);
         x.headPointer = self.headPointer;
+        self.incrementSize();
         return x;
     }
 
@@ -100,6 +109,7 @@ var LinkedList = function(elem, head) {
     self.delete = function(elem) {
         var key = elem.key == undefined ? elem : elem.key;
         var x = self.search(key);
+        self.decrementSize();
         return self.deleteLinkedList(x);
     }
 
@@ -121,6 +131,10 @@ var LinkedList = function(elem, head) {
         return 0;
     }
 
+    self.size = function() {
+        return self.headPointer == null ? 0 : self.headPointer.size;
+    }
+
     return self;
 };
 
@@ -140,6 +154,7 @@ var DoublyLinkedList = function(x) {
         }
         self.updateHead(x);
         x.headPointer = self.headPointer;
+        self.incrementSize();
         return x;
     }
 
@@ -158,6 +173,7 @@ var DoublyLinkedList = function(x) {
         if (x.next != null) {
             x.next.prev = x.prev;
         }
+        self.decrementSize();
         return 1;
     }
 
