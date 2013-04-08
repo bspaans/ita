@@ -68,3 +68,8 @@ Skipped:
 * Doubly Linked Lists
 * Direct Address Tables
 * Hash Tables
+
+Skipped:
+
+* Hashing by multiplication method
+* Universal hashing

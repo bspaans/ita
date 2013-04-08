@@ -555,11 +555,14 @@ test("Hash tables passes the sanity checks", function() {
 
 test("A hash table distributes items in roughly equally sized buckets", function() {
 
-    var arrays = 10;
+    var arrays = 23;
     var idealTestItemsPerSlot = 11;
     var generateItems = arrays * idealTestItemsPerSlot - 2;
 
     var unit = new HashTable(arrays);
+    unit.hashFunction = function(key) {
+        return key % arrays;
+    };
     for (var i = 0; i < arrays; i++) {
         equal(unit.array[i].size(), 0);
     }
@@ -582,9 +585,8 @@ test("A hash table distributes items in roughly equally sized buckets", function
 
     var statistics = Util.getStatistics(dataset, undefined, idealTestItemsPerSlot);
     ok(Math.abs(statistics.mean - idealTestItemsPerSlot) < 1, "Mean should be no more than 1 away from ideal");
-    ok(statistics.variance < 1, "Variance should be smaller than 1");
-    ok(statistics.standardDeviation < 1, "Standard deviation should be smaller than one");
+    ok(statistics.variance < 1, "Variance should be smaller than 1, is: " + statistics.variance);
+    ok(statistics.standardDeviation < 1, "Standard deviation should be smaller than one, is: " + statistics.standardDeviation);
     ok(statistics.distanceFromPredictionInStdDevs <= 0.5);
-
-    console.log(statistics);
 });
+

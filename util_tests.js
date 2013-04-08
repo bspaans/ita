@@ -99,10 +99,31 @@ test("I can get some statistics of a data set", function() {
     equal(statistics.distanceFromPredictionInStdDevs, 1 / Math.sqrt(2));
 });
 
-test("I can get distance in standard deviations from predicted mean", function() {
+test("I can get the distance between the mean and the predicted mean in standard deviations", function() {
 
     var mean = 2;
     var predicted = 3;
     var stddev = 0.5;
     equal(Util.getDistanceFromPredictedMeanInStandardDeviations(mean, predicted, stddev), 2)
+});
+
+test("I can create an array containing random numbers, and prove that it's at least sort of random", function() {
+
+    expect(0);
+
+    var arraySize = 1000;
+    var arrayMinValue = 0;
+    var arrayMaxValue = 10;
+    var randomArr = Util.randomArray(arraySize, arrayMinValue, arrayMaxValue);
+
+    var dataset = [];
+    for (var i = 0; i < 11; i++) {
+        dataset[i] = 0;
+    }
+    for (var i = 0; i < arraySize; i++) {
+        dataset[randomArr[i]]++;
+    }
+
+    var expectedMean = arraySize / (arrayMaxValue - arrayMinValue);
+    var statistics = Util.getStatistics(dataset, undefined, expectedMean);
 });
