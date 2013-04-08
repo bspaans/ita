@@ -184,3 +184,33 @@ var DirectAddressTable = function(size) {
     }
     return self;
 }
+
+var HashMap = function(size) {
+
+    var self = new DirectAddressTable(size);
+    for (var i = 0; i < self.array.length; i++) {
+        self.array[i] = [];
+    }
+    
+    self.hashFunction = function(n) {
+        return n % self.array.length;
+    }
+
+    self.insert = function(elem) {
+        self.array[self.hashFunction(elem.key)].push(elem);
+    }
+
+    self.search = function(key) {
+        var elems = self.array[self.hashFunction(key)];
+        var x = $.grep(elems, function(e) { return e.key == key});
+        return x == null ? null : x[0];
+    }
+
+    self.delete = function(elem) {
+        var h = self.hashFunction(elem.key);
+        var elems = self.array[h];
+        self.array[h] = $.grep(elems, function(e) { return e != elem; });
+    }
+
+    return self;
+}

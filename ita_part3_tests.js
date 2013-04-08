@@ -246,3 +246,54 @@ test("I can delete an item from a direct access table", function() {
     equal(dict.search(1), null);
     equal(dict.search(2), null);
 });
+
+module("Introduction to Algorithms - Part III - chapter 11.2");
+
+test("I can insert an item into a hash map and find it back", function() {
+
+    var dict = new HashMap(10);
+    var called = 0;
+    dict.hashFunction = function(n) { called++; return 1 }
+
+    var item1 = {key: 1, value: 'first'};
+    var item2 = {key: 2, value: 'second'};
+
+    dict.insert(item1);
+    dict.insert(item2);
+
+    equal(called, 2, 'Hash function should be called');
+
+    equal(dict.search(1), item1);
+    equal(dict.search(2), item2);
+    equal(dict.search(3), null);
+
+    equal(called, 5, 'Hash function should be called');
+});
+
+test("I can delete an item from a hash map", function() {
+
+    var dict = new HashMap();
+    var called = 0;
+    dict.hashFunction = function(n) { called++; return 1 }
+    
+    var item1 = {key: 1, value: 'first'};
+    var item2 = {key: 2, value: 'second'};
+
+    dict.insert(item1);
+    dict.insert(item2);
+    
+    equal(called, 2, 'Hash function should be called');
+
+    equal(dict.search(1), item1);
+    equal(dict.search(2), item2);
+    
+    equal(called, 4, 'Hash function should be called');
+
+    dict.delete(item1);
+    dict.delete(item2);
+
+    equal(called, 6, 'Hash function should be called');
+
+    equal(dict.search(1), null);
+    equal(dict.search(2), null);
+});
