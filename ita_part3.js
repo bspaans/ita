@@ -171,6 +171,11 @@ var DictionaryInterface = function() {
     self.insert = function(elem) { throw "Not implemented"; }
     self.search = function(key) { throw "Not implemented"; }
     self.delete = function(elem) { throw "Not implemented"; }
+
+    self.getKey = function(elem) { 
+        return elem == undefined || elem.key == undefined ? elem : elem.key;
+    }
+
     return self;
 }
 
@@ -182,18 +187,22 @@ var DirectAddressTable = function(size) {
     self.array = new Array(size);
 
     self.insert = function(elem) {
+        if (elem == undefined || elem.key == undefined) {
+            throw "Missing key property";
+        }
         self.array[elem.key] = elem;
+        return elem;
     }
     self.search = function(key) {
         return self.array[key];
     }
     self.delete = function(elem) {
-        self.array[elem.key] = null;
+        self.array[self.getKey(elem)] = null;
     }
     return self;
 }
 
-var HashMap = function(size) {
+var HashTable = function(size) {
 
     var self = new DirectAddressTable(size);
     for (var i = 0; i < self.array.length; i++) {
@@ -205,7 +214,11 @@ var HashMap = function(size) {
     }
 
     self.insert = function(elem) {
+        if (elem == undefined || elem.key == undefined) {
+            throw "Missing key property";
+        }
         self.array[self.hashFunction(elem.key)].insert(elem);
+        return elem;
     }
 
     self.search = function(key) {
@@ -213,7 +226,7 @@ var HashMap = function(size) {
     }
 
     self.delete = function(elem) {
-        self.array[self.hashFunction(elem.key)].delete(elem);
+        self.array[self.hashFunction(self.getKey(elem))].delete(elem);
     }
 
     return self;

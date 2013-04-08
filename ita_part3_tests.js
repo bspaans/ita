@@ -347,6 +347,81 @@ test("I have a dictionary interface", function() {
     throws(dict.delete, /Not implemented/);
 });
 
+sanityTestDictionary = function(dict) {
+
+    ok(dict.insert, "Should have an insert method");
+    ok(dict.search, "Should have an search method");
+    ok(dict.delete, "Should have an delete method");
+
+    throws(function() { dict.insert({}); }, /Missing key property/, "Should only insert objects that have a key property");
+    var item = {key:4, and: 'some', data: 'yeah'}
+    deepEqual(dict.insert(item), item, "Should be able to insert");
+    deepEqual(dict.search(4), item, "Should be able to search");
+
+    dict.delete(4);
+    deepEqual(dict.search(4), null, "Should be able to delete on key");
+
+    dict.insert(item);
+    deepEqual(dict.search(4), item);
+
+    dict.delete(item);
+    deepEqual(dict.search(4), null, "Should be able to delete on item");
+}
+
+fuzzTestDictionary = function(dict) {
+
+    var testSize = 100;
+    var items = new Array(testSize);
+    for (var i = 0; i < testSize; i++) {
+        items[i] = dict.insert({key: i, data: 'also: ' + i});
+        ok(items[i], "I can insert items into a dictionary [item: " + i + "]");
+    }
+
+    for (var i = 0; i < testSize; i++) {
+        deepEqual(dict.search(i), items[i], "I can search for a key");
+    }
+
+    for (var i = 0; i < testSize; i++) {
+        if (i % 2 == 0) {
+            dict.delete(i);
+        }
+    }
+
+    for (var i = 0; i < testSize; i++) {
+        if (i % 2 == 0) {
+            deepEqual(dict.search(i), null, "I can delete on key");
+        } else {
+            deepEqual(dict.search(i), items[i]);
+        }
+    }
+
+}
+
+test("I can test a dictionary", function() {
+
+    var DictionaryMock = function() {
+        var self = new DictionaryInterface();
+        var dict = {}
+        self.insert = function(elem) {
+            if (elem == undefined || elem.key == undefined) {
+                throw "Missing key property";
+            }
+            dict[elem.key] = elem;
+            return elem;
+        }
+        self.search = function(key) {
+            return dict[key] == undefined ? null : dict[key];
+        }
+        self.delete = function(elem) {
+            var key = elem.key == undefined ? elem : elem.key;
+            delete dict[key];
+        }
+        return self;
+    }
+    sanityTestDictionary(new DictionaryMock());
+    fuzzTestDictionary(new DictionaryMock());
+});
+
 test("I can insert an item into a direct access table and find it back", function() {
 
     var dict = new DirectAddressTable(10);
@@ -383,11 +458,17 @@ test("I can delete an item from a direct access table", function() {
     equal(dict.search(2), null);
 });
 
+test("Direct access tables passes the sanity checks", function() {
+
+    sanityTestDictionary(new DirectAddressTable());
+    fuzzTestDictionary(new DirectAddressTable());
+});
+
 module("Introduction to Algorithms - Part III - chapter 11.2");
 
-test("I can insert an item into a hash map and find it back", function() {
+test("I can insert an item into a hash table and find it back", function() {
 
-    var dict = new HashMap(10);
+    var dict = new HashTable(10);
     var called = 0;
     dict.hashFunction = function(n) { called++; return 1 }
 
@@ -406,9 +487,9 @@ test("I can insert an item into a hash map and find it back", function() {
     equal(called, 5, 'Hash function should be called');
 });
 
-test("I can delete an item from a hash map", function() {
+test("I can delete an item from a hash table", function() {
 
-    var dict = new HashMap();
+    var dict = new HashTable();
     var called = 0;
     dict.hashFunction = function(n) { called++; return 1 }
     
@@ -432,4 +513,10 @@ test("I can delete an item from a hash map", function() {
 
     equal(dict.search(1), null);
     equal(dict.search(2), null);
+});
+
+test("Hash tables passes the sanity checks", function() {
+
+    sanityTestDictionary(new HashTable());
+    fuzzTestDictionary(new HashTable());
 });
