@@ -53,12 +53,12 @@ var Queue = function(size) {
 };
 
 
-var LinkedListHead = function() {
-    this.item = null;
-    return this;
-}
-
 var LinkedList = function(key, head) {
+
+    var LinkedListHead = function() {
+        this.item = null;
+        return this;
+    }
 
     var self = this;
     self.key = key == undefined ? null : key;
@@ -153,5 +153,34 @@ var DoublyLinkedList = function(x) {
         return 1;
     }
 
+    return self;
+}
+
+var DictionaryInterface = function() {
+
+    var self = this;
+
+    self.insert = function(elem) { throw "Not implemented"; }
+    self.search = function(key) { throw "Not implemented"; }
+    self.delete = function(elem) { throw "Not implemented"; }
+    return self;
+}
+
+var DirectAddressTable = function(size) {
+
+    var self = new DictionaryInterface();
+    
+    var size = size == undefined ? 100 : size;
+    self.array = new Array(size);
+
+    self.insert = function(elem) {
+        self.array[elem.key] = elem;
+    }
+    self.search = function(key) {
+        return self.array[key];
+    }
+    self.delete = function(elem) {
+        self.array[elem.key] = null;
+    }
     return self;
 }

@@ -199,3 +199,50 @@ test("I can delete an item from a doubly linked list", function() {
     equal(ll.delete(6), 1);
     equal(ll.search(6), null);
 });
+
+
+module("Introduction to Algorithms - Part III - chapter 11.1");
+
+test("I have a dictionary interface", function() {
+
+    var dict = new DictionaryInterface();
+    throws(dict.insert, /Not implemented/);
+    throws(dict.search, /Not implemented/);
+    throws(dict.delete, /Not implemented/);
+});
+
+test("I can insert an item into a direct access table and find it back", function() {
+
+    var dict = new DirectAddressTable(10);
+    
+    var item1 = {key: 1, value: 'first'};
+    var item2 = {key: 2, value: 'second'};
+
+    dict.insert(item1);
+    dict.insert(item2);
+
+    equal(dict.search(1), item1);
+    equal(dict.search(2), item2);
+    equal(dict.search(3), null);
+
+});
+
+test("I can delete an item from a direct access table", function() {
+
+    var dict = new DirectAddressTable(10);
+    
+    var item1 = {key: 1, value: 'first'};
+    var item2 = {key: 2, value: 'second'};
+
+    dict.insert(item1);
+    dict.insert(item2);
+
+    equal(dict.search(1), item1);
+    equal(dict.search(2), item2);
+
+    dict.delete(item1);
+    dict.delete(item2);
+
+    equal(dict.search(1), null);
+    equal(dict.search(2), null);
+});
