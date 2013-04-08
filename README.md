@@ -29,6 +29,7 @@ using javascript, to get a better understanding of testing, algorithms and
 
 * Statistically check that the random permutations created by
   `permuteArrayBySorting` and `randomizeArrayInPlace` are uniform.
+* Statistically check hashing functions for hash tables
 
 
 ## Implemented algorithms:
@@ -63,3 +64,7 @@ Skipped:
 
 * Stacks
 * Queues
+* Singly Linked Lists
+* Doubly Linked Lists
+* Direct Address Tables
+* Hash Tables
