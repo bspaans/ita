@@ -841,3 +841,88 @@ test("I can find the predecessor of a binary search tree node", function() {
     strictEqual(tree.predecessor(), tree.left());
     strictEqual(tree.left().predecessor(), tree.left().left().right());
 });
+
+module("Introduction to Algorithms - Part III - chapter 12.3");
+
+test("I can insert a new node into a binary search tree", function() {
+
+    var tree = new BinarySearchTree(6);
+
+    var newLeftNode = new BinarySearchTree(5);
+    tree.insert(newLeftNode);
+    strictEqual(tree.left(), newLeftNode);
+
+    var newRightNode = new BinarySearchTree(7);
+    tree.insert(newRightNode);
+    strictEqual(tree.right(), newRightNode);
+
+    var newRightNode = new BinarySearchTree(7);
+    tree.insert(newRightNode);
+    strictEqual(tree.right().right(), newRightNode);
+});
+
+test("I can replace a subtree with another subtree", function() {
+
+    var tree = new BinarySearchTree(6);
+    tree.setLeft(new BinarySearchTree(5));
+    tree.left().setLeft(new BinarySearchTree(2));
+    
+    var tree2 = new BinarySearchTree(4);
+    tree.setLeft(new BinarySearchTree(1));
+    tree.left().setLeft(new BinarySearchTree(0));
+
+    tree.left().replace(tree2);
+
+    strictEqual(tree.left(), tree2);
+    strictEqual(tree2.parent(), tree);
+
+});
+
+test("I can delete a node from a binary search tree, case 1", function() {
+
+    // Figure 12.4a
+    var tree = new BinarySearchTree(6);
+    tree.setLeft(new BinarySearchTree(5));
+    tree.left().setLeft(new BinarySearchTree(2));
+
+    tree.left().delete();
+    strictEqual(tree.left().key, 2);
+});
+
+test("I can delete a node from a binary search tree, case 2", function() {
+
+    // Figure 12.4b
+    var tree = new BinarySearchTree(6);
+    tree.setLeft(new BinarySearchTree(1));
+    tree.left().setRight(new BinarySearchTree(2));
+
+    tree.left().delete();
+    strictEqual(tree.left().key, 2);
+});
+
+test("I can delete a node from a binary search tree, case 3", function() {
+
+    // Figure 12.4c
+    var tree = new BinarySearchTree(6);
+    tree.setLeft(new BinarySearchTree(2));
+    tree.left().setLeft(new BinarySearchTree(1));
+    tree.left().setRight(new BinarySearchTree(3));
+
+    tree.left().delete();
+    strictEqual(tree.left().key, 3);
+    strictEqual(tree.left().left().key, 1);
+});
+
+test("I can delete a node from a binary search tree, case 4", function() {
+
+    // Figure 12.4d
+    var tree = new BinarySearchTree(6);
+    tree.setLeft(new BinarySearchTree(2));
+    tree.left().setLeft(new BinarySearchTree(1));
+    tree.left().setRight(new BinarySearchTree(4));
+    tree.left().right().setLeft(new BinarySearchTree(3));
+
+    tree.left().delete();
+    strictEqual(tree.left().key, 3);
+    strictEqual(tree.left().left().key, 1);
+});

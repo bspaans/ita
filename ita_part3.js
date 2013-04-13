@@ -327,15 +327,27 @@ var BinarySearchTree = function(key) {
     var right = null;
     var parent = null;
 
+    self.root = function() {
+        var p = self;
+        while (p.parent() != null) {
+            p = p.parent();
+        }
+        return p;
+    }
+
     self.setLeft = function(tree) {
         left = tree;
-        tree.setParent(self);
+        if (tree != null) {
+            tree.setParent(self);
+        }
     }
     self.left = function() { return left; }
 
     self.setRight = function(tree) {
         right = tree;
-        tree.setParent(self);
+        if (tree != null) {
+            tree.setParent(self);
+        }
     }
     self.right = function() { return right; }
 
@@ -415,7 +427,48 @@ var BinarySearchTree = function(key) {
         }
         return y;
     }
+    self.insert = function(tree) {
+        var y = null;
+        var x = self.root();
+        while (x != null) {
+            y = x;
+            x = tree.key < x.key ? x.left() : x.right();
+        }
+        tree.setParent(y);
+        if (y == null) {
+        } else if (tree.key < y.key) {
+            y.setLeft(tree);
+        } else { 
+            y.setRight(tree);
+        }
+        return tree;
+    }
+    self.replace = function(tree) {
+        var p = self.parent();
+        if (p == null) {
+            throw "root replace";
+        }
+        if (p.left() == self) {
+            p.setLeft(tree);
+        } else {
+            p.setRight(tree);
+        }
+    }
+    self.delete = function() {
+        if (left == null) {
+            self.replace(right);
+        } else if (right == null) {
+            self.replace(left);
+        } else {
+            var y = right.minimum();
+            if (y.parent() != self) {
+                y.replace(y.right());
+                y.setRight(right);
+            }
+            self.replace(y);
+            y.setLeft(left);
+        }
+    }
 
     return self;
-
 };
