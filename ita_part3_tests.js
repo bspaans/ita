@@ -720,3 +720,56 @@ test("Hash tables with open addressing and double hashing pass the sanity checks
 });
 
 
+module("Introduction to Algorithms - Part III - chapter 12.1");
+
+test("I can create a binary search tree and do an inorder tree walk", function() {
+
+    // figure 12.1a
+    var tree = new BinarySearchTree(6);
+    tree.left = new BinarySearchTree(5);
+    tree.left.left = new BinarySearchTree(2);
+    tree.left.right = new BinarySearchTree(5);
+    tree.right = new BinarySearchTree(7);
+    tree.right.right = new BinarySearchTree(8);
+
+    var walk = tree.inOrderTreeWalk();
+    deepEqual(walk, [2,5,5,6,7,8]);
+});
+
+test("I can create a binary search tree and do a preorder tree walk", function() {
+
+    // figure 12.1a
+    var tree = new BinarySearchTree(6);
+    tree.left = new BinarySearchTree(5);
+    deepEqual(tree.preOrderTreeWalk(), [6, 5]);
+
+    tree.left.left = new BinarySearchTree(2);
+    deepEqual(tree.preOrderTreeWalk(), [6, 5, 2]);
+
+    tree.left.right = new BinarySearchTree(5);
+    deepEqual(tree.preOrderTreeWalk(), [6, 5, 2, 5]);
+    
+    tree.right = new BinarySearchTree(7);
+    tree.right.right = new BinarySearchTree(8);
+
+    deepEqual(tree.preOrderTreeWalk(), [6, 5, 2, 5, 7, 8]);
+});
+
+test("I can create a binary search tree and do a postorder tree walk", function() {
+
+    // figure 12.1a
+    var tree = new BinarySearchTree(6);
+    tree.left = new BinarySearchTree(5);
+    deepEqual(tree.postOrderTreeWalk(), [5, 6]);
+
+    tree.left.left = new BinarySearchTree(2);
+    deepEqual(tree.postOrderTreeWalk(), [2, 5, 6]);
+
+    tree.left.right = new BinarySearchTree(5);
+    deepEqual(tree.postOrderTreeWalk(), [2, 5, 5, 6]);
+    
+    tree.right = new BinarySearchTree(7);
+    tree.right.right = new BinarySearchTree(8);
+
+    deepEqual(tree.postOrderTreeWalk(), [2, 5, 5, 8, 7, 6]);
+});

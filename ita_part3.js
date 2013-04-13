@@ -318,3 +318,32 @@ var doubleHashing = function(size, key, index) {
     var h2 = key % size;
     return (h1 + index * h2) % size;
 }
+
+
+var BinarySearchTree = function(value) {
+    var self = this;
+    self.value = value;
+    self.left = null;
+    self.right = null;
+
+    self.inOrderTreeWalk = function() {
+        var l = self.left == null ? [] : self.left.inOrderTreeWalk();
+        var r = self.right == null ? [] : self.right.inOrderTreeWalk();
+        l.push(self.value);
+        return l.concat(r);
+    }
+    self.preOrderTreeWalk = function() {
+        var l = self.left == null ? [] : self.left.preOrderTreeWalk();
+        var r = self.right == null ? [] : self.right.preOrderTreeWalk();
+        return [self.value].concat(l).concat(r);
+    }
+    self.postOrderTreeWalk = function() {
+        var l = self.left == null ? [] : self.left.postOrderTreeWalk();
+        var r = self.right == null ? [] : self.right.postOrderTreeWalk();
+        r.push(self.value);
+        return l.concat(r);
+    }
+
+    return self;
+
+};
