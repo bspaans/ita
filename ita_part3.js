@@ -320,28 +320,100 @@ var doubleHashing = function(size, key, index) {
 }
 
 
-var BinarySearchTree = function(value) {
+var BinarySearchTree = function(key) {
     var self = this;
-    self.value = value;
-    self.left = null;
-    self.right = null;
+    self.key = key;
+    var left = null;
+    var right = null;
+    var parent = null;
+
+    self.setLeft = function(tree) {
+        left = tree;
+        tree.setParent(self);
+    }
+    self.left = function() { return left; }
+
+    self.setRight = function(tree) {
+        right = tree;
+        tree.setParent(self);
+    }
+    self.right = function() { return right; }
+
+    self.setParent = function(tree) {
+        parent = tree;
+    }
+    self.parent = function() { return parent; }
 
     self.inOrderTreeWalk = function() {
-        var l = self.left == null ? [] : self.left.inOrderTreeWalk();
-        var r = self.right == null ? [] : self.right.inOrderTreeWalk();
-        l.push(self.value);
+        var l = left == null ? [] : left.inOrderTreeWalk();
+        var r = right == null ? [] : right.inOrderTreeWalk();
+        l.push(self.key);
         return l.concat(r);
     }
     self.preOrderTreeWalk = function() {
-        var l = self.left == null ? [] : self.left.preOrderTreeWalk();
-        var r = self.right == null ? [] : self.right.preOrderTreeWalk();
-        return [self.value].concat(l).concat(r);
+        var l = left == null ? [] : left.preOrderTreeWalk();
+        var r = right == null ? [] : right.preOrderTreeWalk();
+        return [self.key].concat(l).concat(r);
     }
     self.postOrderTreeWalk = function() {
-        var l = self.left == null ? [] : self.left.postOrderTreeWalk();
-        var r = self.right == null ? [] : self.right.postOrderTreeWalk();
-        r.push(self.value);
+        var l = left == null ? [] : left.postOrderTreeWalk();
+        var r = right == null ? [] : right.postOrderTreeWalk();
+        r.push(self.key);
         return l.concat(r);
+    }
+    self.recursiveSearch = function(key) {
+        if (key == self.key) {
+            return self;
+        }
+        if (key < self.key) {
+            return left == null ? null : left.recursiveSearch(key);
+        }
+        return right == null ? null : right.recursiveSearch(key);
+    }
+    self.search = function(key) {
+        var x = self;
+        while (x != null && x.key != key) {
+            x = key < x.key ? x.left() : x.right();
+        }
+        return x;
+    }
+    self.minimum = function() {
+        var x = self;
+        while (x.left() != null) {
+            x = x.left();
+        }
+        return x;
+    }
+    self.maximum = function() {
+        var x = self;
+        while (x.right() != null) {
+            x = x.right();
+        }
+        return x;
+    }
+    self.successor = function() {
+        if (right != null) {
+            return right.minimum();
+        }
+        var x = self;
+        var y = parent;
+        while (y != null && x == y.right()) {
+            x = y;
+            y = x.parent();
+        }
+        return y;
+    }
+    self.predecessor = function() {
+        if (left != null) {
+            return left.maximum();
+        }
+        var x = self;
+        var y = parent;
+        while (y != null && x == y.left()) {
+            x = y;
+            y = x.parent();
+        }
+        return y;
     }
 
     return self;

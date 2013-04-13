@@ -720,56 +720,124 @@ test("Hash tables with open addressing and double hashing pass the sanity checks
 });
 
 
-module("Introduction to Algorithms - Part III - chapter 12.1");
+module("Introduction to Algorithms - Part III - chapter 12.1", {
+
+    setup: function() {
+
+        // figure 12.1a
+        var tree = new BinarySearchTree(6);
+        tree.setLeft(new BinarySearchTree(5));
+        tree.left().setLeft(new BinarySearchTree(2));
+        tree.left().setRight(new BinarySearchTree(5));
+        tree.setRight(new BinarySearchTree(7));
+        tree.right().setRight(new BinarySearchTree(8));
+        this.tree = tree;
+    }
+});
 
 test("I can create a binary search tree and do an inorder tree walk", function() {
 
-    // figure 12.1a
-    var tree = new BinarySearchTree(6);
-    tree.left = new BinarySearchTree(5);
-    tree.left.left = new BinarySearchTree(2);
-    tree.left.right = new BinarySearchTree(5);
-    tree.right = new BinarySearchTree(7);
-    tree.right.right = new BinarySearchTree(8);
-
-    var walk = tree.inOrderTreeWalk();
-    deepEqual(walk, [2,5,5,6,7,8]);
+    deepEqual(this.tree.inOrderTreeWalk(), [2,5,5,6,7,8]);
 });
 
 test("I can create a binary search tree and do a preorder tree walk", function() {
 
-    // figure 12.1a
-    var tree = new BinarySearchTree(6);
-    tree.left = new BinarySearchTree(5);
-    deepEqual(tree.preOrderTreeWalk(), [6, 5]);
-
-    tree.left.left = new BinarySearchTree(2);
-    deepEqual(tree.preOrderTreeWalk(), [6, 5, 2]);
-
-    tree.left.right = new BinarySearchTree(5);
-    deepEqual(tree.preOrderTreeWalk(), [6, 5, 2, 5]);
-    
-    tree.right = new BinarySearchTree(7);
-    tree.right.right = new BinarySearchTree(8);
-
-    deepEqual(tree.preOrderTreeWalk(), [6, 5, 2, 5, 7, 8]);
+    deepEqual(this.tree.preOrderTreeWalk(), [6, 5, 2, 5, 7, 8]);
 });
 
 test("I can create a binary search tree and do a postorder tree walk", function() {
 
-    // figure 12.1a
+    deepEqual(this.tree.postOrderTreeWalk(), [2, 5, 5, 8, 7, 6]);
+});
+
+
+module("Introduction to Algorithms - Part III - chapter 12.2", {
+
+    setup: function() {
+        var tree = new BinarySearchTree(6);
+        tree.setLeft(new BinarySearchTree(5));
+        tree.left().setLeft(new BinarySearchTree(2));
+        tree.left().left().setRight(new BinarySearchTree(3));
+        tree.setRight(new BinarySearchTree(7));
+        tree.right().setRight(new BinarySearchTree(8));
+        this.tree = tree;
+    }
+});
+
+test("I can search for a key in a binary search tree", function() {
+
+    strictEqual(this.tree.recursiveSearch(5), this.tree.left());
+    strictEqual(this.tree.recursiveSearch(3), this.tree.left().left().right());
+    strictEqual(this.tree.recursiveSearch(8), this.tree.right().right());
+    equal(this.tree.recursiveSearch(9), null);
+});
+
+test("I can search for a key in a binary search tree using iterative search", function() {
+
+    strictEqual(this.tree.search(5), this.tree.left());
+    strictEqual(this.tree.search(3), this.tree.left().left().right());
+    strictEqual(this.tree.search(8), this.tree.right().right());
+    equal(this.tree.search(9), null);
+});
+
+test("I can find the minimum of a binary search tree", function() {
+
     var tree = new BinarySearchTree(6);
-    tree.left = new BinarySearchTree(5);
-    deepEqual(tree.postOrderTreeWalk(), [5, 6]);
+    strictEqual(tree.minimum(), tree);
 
-    tree.left.left = new BinarySearchTree(2);
-    deepEqual(tree.postOrderTreeWalk(), [2, 5, 6]);
+    tree.setLeft(new BinarySearchTree(5));
+    strictEqual(tree.minimum(), tree.left());
 
-    tree.left.right = new BinarySearchTree(5);
-    deepEqual(tree.postOrderTreeWalk(), [2, 5, 5, 6]);
-    
-    tree.right = new BinarySearchTree(7);
-    tree.right.right = new BinarySearchTree(8);
+    tree.left().setLeft(new BinarySearchTree(2));
+    tree.left().left().setRight(new BinarySearchTree(3));
+    tree.setRight(new BinarySearchTree(7));
+    tree.right().setRight(new BinarySearchTree(8));
 
-    deepEqual(tree.postOrderTreeWalk(), [2, 5, 5, 8, 7, 6]);
+    strictEqual(tree.minimum(), tree.left().left());
+});
+
+test("I can find the maximum of a binary search tree", function() {
+
+    var tree = new BinarySearchTree(6);
+    strictEqual(tree.maximum(), tree);
+
+    tree.setLeft(new BinarySearchTree(5));
+    strictEqual(tree.maximum(), tree);
+
+    tree.left().setLeft(new BinarySearchTree(2));
+    tree.left().left().setRight(new BinarySearchTree(3));
+    tree.setRight(new BinarySearchTree(7));
+    tree.right().setRight(new BinarySearchTree(8));
+
+    strictEqual(tree.maximum(), tree.right().right());
+});
+
+test("I can find the successor of a binary search tree node", function() {
+
+    var tree = new BinarySearchTree(6);
+    tree.setLeft(new BinarySearchTree(5));
+    strictEqual(tree.successor(), null);
+
+    tree.left().setLeft(new BinarySearchTree(2));
+    tree.left().left().setRight(new BinarySearchTree(3));
+    tree.setRight(new BinarySearchTree(7));
+    tree.right().setRight(new BinarySearchTree(8));
+
+    strictEqual(tree.successor(), tree.right());
+    strictEqual(tree.left().left().right().successor(), tree.left());
+});
+
+test("I can find the predecessor of a binary search tree node", function() {
+
+    var tree = new BinarySearchTree(6);
+    tree.setLeft(new BinarySearchTree(5));
+    strictEqual(tree.predecessor(), tree.left());
+
+    tree.left().setLeft(new BinarySearchTree(2));
+    tree.left().left().setRight(new BinarySearchTree(3));
+    tree.setRight(new BinarySearchTree(7));
+    tree.right().setRight(new BinarySearchTree(8));
+
+    strictEqual(tree.predecessor(), tree.left());
+    strictEqual(tree.left().predecessor(), tree.left().left().right());
 });
