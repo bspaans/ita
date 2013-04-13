@@ -132,10 +132,10 @@ test("I can delete an item from a linked list", function() {
 
     var ll = new LinkedList(5);
     ll.insert(6);
-    equal(ll.delete(5), 1);
+    equal(ll.delete(5), true);
     equal(ll.search(5), null);
-    equal(ll.delete(5), 0);
-    equal(ll.delete(6), 1);
+    equal(ll.delete(5), false);
+    equal(ll.delete(6), true);
     equal(ll.search(6), null);
 });
 
@@ -212,13 +212,15 @@ test("I can get the size of singly linked list", function() {
     var ll = new LinkedList();
     equal(ll.size(), 0);
 
-    var ll1 = ll.insert(100);
+    ll.insert(100);
     equal(ll.size(), 1);
-    var ll2 = ll.insert(200);
+    ll.insert(200);
     equal(ll.size(), 2);
-    var ll3 = ll.insert(300);
+    ll.insert(300);
     equal(ll.size(), 3);
 
+    ll.delete(100);
+    equal(ll.size(), 2);
     ll.delete(100);
     equal(ll.size(), 2);
 });
@@ -716,3 +718,5 @@ test("Hash tables with open addressing and double hashing pass the sanity checks
     table.hashFunction = function(key, h) { return doubleHashing(size, key, h); }
     fuzzTestDictionary(new OpenAddressingHashTable());
 });
+
+

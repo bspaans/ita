@@ -109,26 +109,29 @@ var LinkedList = function(elem, head) {
     self.delete = function(elem) {
         var key = elem.key == undefined ? elem : elem.key;
         var x = self.search(key);
-        self.decrementSize();
-        return self.deleteLinkedList(x);
+        var result = self.deleteLinkedList(x);
+        if (result) {
+            self.decrementSize();
+        }
+        return result;
     }
 
     self.deleteLinkedList = function(x) {
         var elem = self.head();
         if (elem == x) {
             self.updateHead(elem.next);
-            return 1;
+            return true;
         }
         var prev = null;
         while (elem != null) {
             if (elem == x) {
                 prev.next = elem.next;
-                return 1;
+                return true;
             } 
             prev = elem;
             elem = elem.next;
         }
-        return 0;
+        return false;
     }
 
     self.size = function() {
