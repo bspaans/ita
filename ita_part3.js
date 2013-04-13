@@ -247,3 +247,69 @@ var HashTable = function(size) {
 
     return self;
 }
+
+var OpenAddressingHashTable = function(size) {
+
+    var size = size == undefined ? 100 : size;
+    var self = new DirectAddressTable(size);
+    for (var i = 0; i < size; i++) {
+        self.array[i] = null;
+    }
+
+    self.hashFunction = function(key, j) {
+        return linearProbing(size, key, j);
+    }
+
+    self.insert = function(elem) {
+        if (elem == undefined || elem.key == undefined) {
+            throw "Missing key property";
+        }
+        for (var i = 0; i < size; i++) {
+            var j = self.hashFunction(elem.key, i);
+            if (self.array[j] == null || self.array[j].key == 'deleted') {
+                self.array[j] = elem;
+                return elem;
+            } 
+        }
+        throw "Hash table overflow";
+    }
+
+    self.search = function(elem) {
+        var key = self.getKey(elem);
+        for (var i = 0; i < size; i++) {
+            var arr = self.array[self.hashFunction(key, i)];
+            if (arr == null) { break; }
+            if (arr.key == key) { return arr; }
+        }
+        return null;
+    }
+
+    self.delete = function(elem) {
+        var key = self.getKey(elem);
+        for (var i = 0; i < size; i++) {
+            var j = self.hashFunction(key, i);
+            var arr = self.array[j];
+            if (arr == null) { break; }
+            if (arr.key == key) { 
+                self.array[j] = {key: 'deleted'};
+            }
+        }
+    }
+    return self;
+}
+
+var linearProbing = function(size, key, index) {
+    var h1 = key % size;
+    return (h1 + index) % size;
+};
+var quadraticProbing = function(size, key, index, c1, c2) {
+    var c1 = c1 === undefined ? 2 : c1;
+    var c2 = c2 === undefined ? 3 : c2;
+    var h1 = key % size;
+    return (h1 + c1 * index + c2 * index * index) % size;
+}
+var doubleHashing = function(size, key, index) {
+    var h1 = key % size;
+    var h2 = key % size;
+    return (h1 + index * h2) % size;
+}

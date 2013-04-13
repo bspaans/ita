@@ -398,6 +398,10 @@ sanityTestDictionary = function(dict) {
 
     dict.delete(item);
     deepEqual(dict.search(4), null, "Should be able to delete on item");
+
+    var updatedItem = {key: 4, updated: 'data'};
+    deepEqual(dict.insert(updatedItem), updatedItem, "Should be able to update on key");
+    deepEqual(dict.search(4), updatedItem, "Should be able to update on key");
 }
 
 fuzzTestDictionary = function(dict) {
@@ -590,3 +594,125 @@ test("A hash table distributes items in roughly equally sized buckets", function
     ok(statistics.distanceFromPredictionInStdDevs <= 0.5);
 });
 
+module("Introduction to Algorithms - Part III - chapter 11.4");
+
+test("I can insert an item into a hash table that uses open addressing, and find it back", function() {
+
+    var dict = new OpenAddressingHashTable(10);
+    var called = 0;
+    dict.hashFunction = function(key, index) { called++; return key }
+
+    var item1 = {key: 1, value: 'first'};
+    var item2 = {key: 2, value: 'second'};
+
+    deepEqual(dict.insert(item1), item1);
+    deepEqual(dict.insert(item2), item2);
+
+    equal(called, 2, 'Hash function should be called');
+
+    equal(dict.search(1), item1);
+    equal(dict.search(2), item2);
+    equal(dict.search(3), null);
+
+    equal(called, 5, 'Hash function should be called');
+});
+
+test("I get a hashtable overflow if I insert to many elements in a hash table that uses open addressing", function() {
+
+    var size = 10;
+    var dict = new OpenAddressingHashTable(size);
+    for (var i = 0; i < size; i++) {
+        dict.insert({key: i});
+    }
+    throws(function() { dict.insert({key: i}) }, /Hash table overflow/);
+});
+
+test("I can delete an item from a hash table that uses open addressing", function() {
+
+    var dict = new OpenAddressingHashTable();
+    
+    var item1 = {key: 1, value: 'first'};
+    var item2 = {key: 2, value: 'second'};
+
+    dict.insert(item1);
+    dict.insert(item2);
+    
+    equal(dict.search(1), item1);
+    equal(dict.search(2), item2);
+    
+    dict.delete(item1);
+    dict.delete(item2);
+
+    equal(dict.search(1), null);
+    equal(dict.search(2), null);
+});
+
+test("Hash tables with open addressing pass the sanity checks", function() {
+
+    sanityTestDictionary(new OpenAddressingHashTable());
+    fuzzTestDictionary(new OpenAddressingHashTable());
+});
+
+test("I can hash with a linear probe", function() {
+
+    var size = 10;
+    var key = 123;
+    var h = linearProbing(size, key, 0);
+
+    for (var i = 1; i < size; i++) {
+        equal(linearProbing(size, key, i), (h + i) % size, "Probing again with the same key will use the next slot");
+    }
+});
+
+test("Hash tables with open addressing and linear probing pass the sanity checks", function() {
+
+    var size = 100;
+    var table = new OpenAddressingHashTable();
+    table.hashFunction = function(key, h) { return linearProbing(size, key, h); }
+
+    sanityTestDictionary(table);
+
+    var table = new OpenAddressingHashTable();
+    table.hashFunction = function(key, h) { return linearProbing(size, key, h); }
+    fuzzTestDictionary(new OpenAddressingHashTable());
+});
+
+test("I can hash with a quadratic probe", function() {
+
+    var size = 10;
+    var key = 123;
+    var c1 = 4;
+    var c2 = 5;
+    var h = quadraticProbing(size, key, 0, c1, c2);
+
+    for (var i = 1; i < size; i++) {
+        equal(quadraticProbing(size, key, i, c1, c2), (h + c1 * i + c2 * i * i) % size, 
+            "Probing again with the same key will use a slot number which depends in a quadratic matter on i");
+    }
+});
+
+test("Hash tables with open addressing and quadratic probing pass the sanity checks", function() {
+
+    var size = 100;
+    var table = new OpenAddressingHashTable();
+    table.hashFunction = function(key, h) { return quadraticProbing(size, key, h); }
+
+    sanityTestDictionary(table);
+
+    var table = new OpenAddressingHashTable();
+    table.hashFunction = function(key, h) { return quadraticProbing(size, key, h); }
+    fuzzTestDictionary(new OpenAddressingHashTable());
+});
+
+test("Hash tables with open addressing and double hashing pass the sanity checks", function() {
+
+    var size = 100;
+    var table = new OpenAddressingHashTable();
+    table.hashFunction = function(key, h) { return doubleHashing(size, key, h); }
+
+    sanityTestDictionary(table);
+
+    var table = new OpenAddressingHashTable();
+    table.hashFunction = function(key, h) { return doubleHashing(size, key, h); }
+    fuzzTestDictionary(new OpenAddressingHashTable());
+});
