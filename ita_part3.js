@@ -277,27 +277,29 @@ var OpenAddressingHashTable = function(size) {
         throw "Hash table overflow";
     }
 
-    self.search = function(elem) {
-        var key = self.getKey(elem);
-        for (var i = 0; i < size; i++) {
-            var arr = self.array[self.hashFunction(key, i)];
-            if (arr == null) { break; }
-            if (arr.key == key) { return arr; }
-        }
-        return null;
-    }
-
-    self.delete = function(elem) {
+    var findElement = function(elem) {
         var key = self.getKey(elem);
         for (var i = 0; i < size; i++) {
             var j = self.hashFunction(key, i);
-            var arr = self.array[j];
-            if (arr == null) { break; }
-            if (arr.key == key) { 
-                self.array[j] = {key: 'deleted'};
-            }
+            var obj = self.array[j];
+            if (obj == null) { break; }
+            if (obj.key == key) { return j; }
+        }
+        return -1;
+    }
+
+    self.search = function(elem) {
+        var j = findElement(elem);
+        return j == -1 ? null : self.array[j];
+    }
+
+    self.delete = function(elem) {
+        var j = findElement(elem);
+        if (j != -1) {
+            self.array[j] = {key: 'deleted'};
         }
     }
+
     return self;
 }
 
