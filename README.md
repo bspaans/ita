@@ -73,3 +73,9 @@ Skipped:
 
 * Hashing by multiplication method
 * Universal hashing
+
+### Part VI - Graph Algorithms
+
+* Adjacency list representation
+* Adjacency matrix representation
+
