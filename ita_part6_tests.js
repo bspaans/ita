@@ -80,7 +80,7 @@ var getGraphForTesting = function () {
     return graph;
 }
 
-test("I can do a breadth first search for vertex v on an adjacency list matrix and get the distances for each vertix that has a path to v", function() {
+test("I can do a breadth first search for vertex v on an adjacency list graph and get the distances for each vertix that has a path to v", function() {
 
     var graph = getGraphForTesting();
     var bfsResult = graph.breadthFirstSearch('ORL');
@@ -91,7 +91,7 @@ test("I can do a breadth first search for vertex v on an adjacency list matrix a
     equal(distance['AMS'], 2);
 });
 
-test("I can do a breadth first search for vertex v on an adjacency list matrix and get the predecessors for each vertix that has a path to v", function() {
+test("I can do a breadth first search for vertex v on an adjacency list graph and get the predecessors for each vertix that has a path to v", function() {
 
     var graph = getGraphForTesting();
     var bfsResult = graph.breadthFirstSearch('ORL');
@@ -102,7 +102,7 @@ test("I can do a breadth first search for vertex v on an adjacency list matrix a
     equal(predecessor['AMS'], 'SOU');
 });
 
-test("I can get a shortest path between two vertices in an adjacency list matrix", function() {
+test("I can get a shortest path between two vertices in an adjacency list graph", function() {
 
     var graph = getGraphForTesting();
 
@@ -124,7 +124,7 @@ test("I can get a shortest path between two vertices in an adjacency list matrix
 
 module("Introduction to Algorithms - Part VI - chapter 22.3");
 
-test("I can do a depth first search on an adjacency list matrix", function() {
+test("I can do a depth first search on an adjacency list graph", function() {
 
     var graph = getGraphForTesting();
     var dfsResult = graph.depthFirstSearch('ORL');
@@ -171,7 +171,7 @@ var getDirectedGraphForTesting = function() {
     return graph;
 }
 
-test("I can do a depth first search on a directed adjacency list matrix", function() {
+test("I can do a depth first search on a directed adjacency list graph", function() {
 
     var graph = getDirectedGraphForTesting();
     var dfsResult = graph.depthFirstSearch('undershorts');
@@ -188,10 +188,31 @@ test("I can do a depth first search on a directed adjacency list matrix", functi
     equal(predecessors['jacket'], 'belt');
 });
 
-test("I can do a topologicalSort on a directed adjacency list matrix", function() {
+module("Introduction to Algorithms - Part VI - chapter 22.4");
+
+test("I can do a topological sort on a directed adjacency list graph", function() {
 
     var graph = getDirectedGraphForTesting();
     var topologicalSort = graph.topologicalSort();
+
+    var indeces = {}
+    $.each(topologicalSort, function(i, v) { indeces[v] = i; });
+
+    ok(indeces['pants'] > indeces['undershorts']);
+    ok(indeces['shoes'] > indeces['undershorts']);
+    ok(indeces['shoes'] > indeces['socks']);
+    ok(indeces['belt'] > indeces['pants']);
+    ok(indeces['belt'] > indeces['shirt']);
+    ok(indeces['tie'] > indeces['shirt']);
+    ok(indeces['jacket'] > indeces['tie']);
+    ok(indeces['jacket'] > indeces['belt']);
+});
+
+
+test("I can do a recursive topological sort on a directed adjacency list graph", function() {
+
+    var graph = getDirectedGraphForTesting();
+    var topologicalSort = graph.topologicalSortRecursive();
 
     var indeces = {}
     $.each(topologicalSort, function(i, v) { indeces[v] = i; });

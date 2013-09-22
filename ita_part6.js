@@ -86,25 +86,50 @@ var AdjacencyListGraph = function() {
         return { predecessors: predecessors };
     }
 
+    self.topologicalSortRecursive = function() {
+
+        var seen = {};
+        var topologicalSort = [];
+        var stack = [];
+
+        $.each(self.keys, function(v) {
+            stack.push(v);
+        });
+
+        while (stack.length != 0) {
+            s = stack.pop();
+            if (s['add-to-sort'] !== undefined) {
+                topologicalSort.splice(0,0,s['add-to-sort']);
+                continue;
+            }
+            if (!seen[s]) {
+                stack.push({'add-to-sort': s});
+                seen[s] = true;
+                $.each(self.getNeighbours(s), function(i, m) {
+                    stack.push(m);
+                });
+            }
+        }
+        return topologicalSort;
+    }
+
     self.topologicalSort = function() {
 
         var seen = {};
         var topologicalSort = [];
 
         var visit = function(n) {
-            if (seen[n] === false) return;
-            if (seen[n] === undefined) {
-                seen[n] = false;
+            if (!seen[n]) {
+                seen[n] = true;
                 $.each(self.getNeighbours(n), function(i, m) {
                     visit(m);
                 });
-                seen[n] = true;
                 topologicalSort.splice(0,0,n);
             }
         }
 
         $.each(self.keys, function(v) {
-            if (seen[v] === undefined) { visit(v); }
+            if (!seen[v]) { visit(v); }
         });
         return topologicalSort;
     }
