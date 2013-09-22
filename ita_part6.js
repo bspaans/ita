@@ -18,6 +18,46 @@ var AdjacencyListGraph = function() {
     self.getNeighbours = function(v) {
         return self.graph[v]
     }
+
+
+    self.breadthFirstSearch = function(v) {
+        var seen = {};
+        var distances = {};
+        var predecessors = {};
+        $.each(self.graph, function(v) {
+            seen[v] = false;
+            distances[v] = -1;
+            predecessors[v] = undefined;
+        });
+
+        distances[v] = 0;
+        seen[v] = true;
+        queue = [v];
+        while (queue.length != 0) {
+            var s = queue.shift();
+            $.each(self.getNeighbours(s), function(i, neighbour) {
+                if (!seen[neighbour]) {
+                    queue.push(neighbour);
+                    distances[neighbour] = distances[s] + 1;
+                    predecessors[neighbour] = s;
+                    seen[neighbour] = true;
+                }
+            });
+        }
+        return {distances: distances, predecessors: predecessors}
+    }
+
+    self.shortestPath = function(v1, v2) {
+        var bfsResult = self.breadthFirstSearch(v1);
+        var path = [];
+        var v = v2;
+        while (v != undefined) {
+            path.splice(0, 0, v);
+            v = bfsResult.predecessors[v];
+        }
+        return path;
+
+    }
 }
 
 var AdjacencyMatrixGraph = function() {

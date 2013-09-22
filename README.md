@@ -68,14 +68,18 @@ Skipped:
 * Doubly Linked Lists
 * Direct Address Tables
 * Hash Tables
+* Binary Search Trees
 
 Skipped:
 
 * Hashing by multiplication method
 * Universal hashing
+* Red Black Trees
 
 ### Part VI - Graph Algorithms
 
 * Adjacency list representation
 * Adjacency matrix representation
+* Breadth first search
+* Shortest path 
 
