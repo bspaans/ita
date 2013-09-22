@@ -84,4 +84,10 @@ Skipped:
 * Shortest path 
 * Depth first search 
 * Topological sorting
+* Recursive topological sorting
+* Kruskal's algorithm for minimum spanning trees
+
+Skipped:
+
+* Prim's algorithm for minimum spanning trees
 

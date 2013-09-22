@@ -3,19 +3,24 @@ var AdjacencyListGraph = function() {
     var self = this;
     self.graph = {}
     self.keys = {};
+    self.weight = {}
+    self.undirectedEdges = []
 
-    self.addDirectedEdge = function(v1, v2) {
+    self.addDirectedEdge = function(v1, v2, weight) {
         if (self.graph[v1] === undefined) {
             self.graph[v1] = [];
+            self.weight[v1] = {};
         }
-        self.graph[v1].push(v2)
+        self.weight[v1][v2] = weight;
+        self.graph[v1].push(v2);
         self.keys[v1] = true;
         self.keys[v2] = true;
     }
 
-    self.addEdge = function(v1, v2) {
-        self.addDirectedEdge(v1, v2);
-        self.addDirectedEdge(v2, v1);
+    self.addEdge = function(v1, v2, weight) {
+        self.addDirectedEdge(v1, v2, weight);
+        self.addDirectedEdge(v2, v1, weight);
+        self.undirectedEdges.push({'v1': v1, 'v2': v2, 'weight': weight});
     }
 
     self.getNeighbours = function(v) {
@@ -132,6 +137,38 @@ var AdjacencyListGraph = function() {
             if (!seen[v]) { visit(v); }
         });
         return topologicalSort;
+    }
+    
+    self.edgesInNonDecreasingWeight = function() {
+        var sortOnWeight = function(a, b) {
+            return a.weight < b.weight ? -1 : 1;
+        }
+        return self.undirectedEdges.sort(sortOnWeight);
+    }
+
+    self.minimumSpanningTreeKruskal = function() {
+        var mst = {}
+        var sets = {}
+        $.each(self.keys, function(v) {
+            sets[v] = {}
+            sets[v][v] = true;
+            mst[v] = {}
+        });
+
+        var union = function(v1, v2) {
+            $.each(sets[v2], function(v) {
+                sets[v1][v] = true;
+                sets[v] = sets[v1];
+            });
+        }
+
+        $.each(self.edgesInNonDecreasingWeight(), function(i, edge) {
+            if (sets[edge.v1] !== sets[edge.v2]) {
+                mst[edge.v1][edge.v2] = true;
+                union(edge.v1, edge.v2);
+            }
+        });
+        return mst;
     }
 }
 

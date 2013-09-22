@@ -226,3 +226,71 @@ test("I can do a recursive topological sort on a directed adjacency list graph",
     ok(indeces['jacket'] > indeces['tie']);
     ok(indeces['jacket'] > indeces['belt']);
 });
+
+
+module("Introduction to Algorithms - Part VI - chapter 23.2");
+
+// figure 23.1
+var getUndirectedGraphForTesting = function() {
+
+    var graph = new AdjacencyListGraph();
+    graph.addEdge('a', 'b', 4);
+    graph.addEdge('a', 'h', 8);
+    graph.addEdge('b', 'c', 8);
+    graph.addEdge('b', 'h', 11);
+    graph.addEdge('c', 'd', 7);
+    graph.addEdge('c', 'f', 4);
+    graph.addEdge('c', 'i', 2);
+    graph.addEdge('d', 'e', 9);
+    graph.addEdge('d', 'f', 14);
+    graph.addEdge('e', 'f', 10);
+    graph.addEdge('f', 'g', 2);
+    graph.addEdge('g', 'h', 1);
+    graph.addEdge('g', 'i', 6);
+    graph.addEdge('h', 'i', 7);
+    return graph;
+}
+
+test("I can get edges in non decreasing weight", function() {
+
+
+    var graph = getUndirectedGraphForTesting();
+    var edges = graph.edgesInNonDecreasingWeight();
+
+    var last = 0
+    $.each(edges, function(i, edge) {
+        ok(edge.weight >= last);
+        last = edge.weight;
+    });
+    equal(edges.length, 14);
+
+
+});
+
+test("I can get the minimum spanning tree of an undirected adjacency list graph", function() {
+
+    var graph = getUndirectedGraphForTesting();
+    var mst = graph.minimumSpanningTreeKruskal();
+
+    ok(mst['a']['b']);
+    ok(mst['a']['h'] || mst['b']['c']);
+    ok(mst['c']['d']);
+    ok(mst['c']['f']);
+    ok(mst['c']['i']);
+    ok(mst['d']['e']);
+    ok(mst['f']['g']);
+    ok(mst['g']['h']);
+
+    var nrOfEdges = 0;
+    var weight = 0;
+    $.each(mst, function(v1, edges) {
+        $.each(edges, function(v2, connected) {
+            if (connected) {
+                nrOfEdges++;
+                weight += graph.weight[v1][v2];
+            }
+        });
+    });
+    equal(nrOfEdges, 8);
+    equal(weight, 37);
+});
