@@ -2,12 +2,15 @@ var AdjacencyListGraph = function() {
 
     var self = this;
     self.graph = {}
+    self.keys = {};
 
     self.addDirectedEdge = function(v1, v2) {
         if (self.graph[v1] === undefined) {
             self.graph[v1] = [];
         }
         self.graph[v1].push(v2)
+        self.keys[v1] = true;
+        self.keys[v2] = true;
     }
 
     self.addEdge = function(v1, v2) {
@@ -16,7 +19,7 @@ var AdjacencyListGraph = function() {
     }
 
     self.getNeighbours = function(v) {
-        return self.graph[v]
+        return self.graph[v] == undefined ? [] : self.graph[v];
     }
 
 
@@ -56,7 +59,54 @@ var AdjacencyListGraph = function() {
             v = bfsResult.predecessors[v];
         }
         return path;
+    }
 
+    self.depthFirstSearch = function(v) {
+        var seen = {};
+        var predecessors = {};
+
+        $.each(self.keys, function(v) {
+            seen[v] = false;
+            predecessors[v] = undefined;
+        });
+
+        var stack = [v];
+        while (stack.length > 0) {
+            var s = stack.pop();
+            if (!seen[s]) {
+                seen[s] = true;
+                $.each(self.getNeighbours(s), function(i, n) {
+                    if (!seen[n]) { 
+                        predecessors[n] = s;
+                        stack.push(n); 
+                    }
+                });
+            }
+        }
+        return { predecessors: predecessors };
+    }
+
+    self.topologicalSort = function() {
+
+        var seen = {};
+        var topologicalSort = [];
+
+        var visit = function(n) {
+            if (seen[n] === false) return;
+            if (seen[n] === undefined) {
+                seen[n] = false;
+                $.each(self.getNeighbours(n), function(i, m) {
+                    visit(m);
+                });
+                seen[n] = true;
+                topologicalSort.splice(0,0,n);
+            }
+        }
+
+        $.each(self.keys, function(v) {
+            if (seen[v] === undefined) { visit(v); }
+        });
+        return topologicalSort;
     }
 }
 

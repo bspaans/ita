@@ -82,4 +82,6 @@ Skipped:
 * Adjacency matrix representation
 * Breadth first search
 * Shortest path 
+* Depth first search 
+* Topological sorting
 

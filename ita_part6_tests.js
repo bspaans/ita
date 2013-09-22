@@ -65,16 +65,18 @@ module("Introduction to Algorithms - Part VI - chapter 22.2");
 
 var getGraphForTesting = function () {
 
-    //          DUB----\      
+    //          DUB----\             
     //           |      >--AMS
     //          SOU----/
     //           |---------ORL
+    //                                   SIN------NRT
     //
     var graph = new AdjacencyListGraph();
     graph.addEdge('ORL', 'SOU');
     graph.addEdge('SOU', 'AMS');
     graph.addEdge('AMS', 'DUB');
     graph.addEdge('SOU', 'DUB');
+    graph.addEdge('SIN', 'NRT');
     return graph;
 }
 
@@ -121,3 +123,85 @@ test("I can get a shortest path between two vertices in an adjacency list matrix
 });
 
 module("Introduction to Algorithms - Part VI - chapter 22.3");
+
+test("I can do a depth first search on an adjacency list matrix", function() {
+
+    var graph = getGraphForTesting();
+    var dfsResult = graph.depthFirstSearch('ORL');
+    var predecessors = dfsResult.predecessors;
+
+    equal(predecessors['ORL'], undefined);
+    equal(predecessors['SOU'], 'ORL');
+    ok($.inArray(predecessors['AMS'], ['SOU', 'DUB']) != -1);
+    ok($.inArray(predecessors['DUB'], ['SOU', 'AMS']) != -1);
+
+    var dfsResult = graph.depthFirstSearch('SIN');
+    var predecessors = dfsResult.predecessors;
+    equal(predecessors['SIN'], undefined);
+    equal(predecessors['NRT'], 'SIN');
+});
+
+
+// Figure 22.7
+var getDirectedGraphForTesting = function() {
+
+    //      undershorts         socks 
+    //            |     \         |
+    //            v      \        v
+    //          pants ----\---->shoes
+    //            |
+    //            v          shirt
+    //          belt <-------/ |
+    //              \          v
+    //               \        tie
+    //                \        |
+    //                 \       v
+    //                  \-->jacket
+    //
+    var graph = new AdjacencyListGraph();
+    graph.addDirectedEdge('undershorts', 'pants');
+    graph.addDirectedEdge('undershorts', 'shoes');
+    graph.addDirectedEdge('socks', 'shoes');
+    graph.addDirectedEdge('pants', 'shoes');
+    graph.addDirectedEdge('pants', 'belt');
+    graph.addDirectedEdge('shirt', 'belt');
+    graph.addDirectedEdge('shirt', 'tie');
+    graph.addDirectedEdge('belt', 'jacket');
+    graph.addDirectedEdge('tie', 'jacket');
+    return graph;
+}
+
+test("I can do a depth first search on a directed adjacency list matrix", function() {
+
+    var graph = getDirectedGraphForTesting();
+    var dfsResult = graph.depthFirstSearch('undershorts');
+    var predecessors = dfsResult.predecessors;
+
+    var checkPredecessors = function(v, possiblePredecessors) {
+        possiblePredecessors.push(undefined);
+        ok($.inArray(predecessors[v], possiblePredecessors) != -1);
+    }
+    equal(predecessors['undershorts'], undefined);
+    equal(predecessors['pants'], 'undershorts');
+    equal(predecessors['shoes'], 'undershorts');
+    equal(predecessors['belt'], 'pants');
+    equal(predecessors['jacket'], 'belt');
+});
+
+test("I can do a topologicalSort on a directed adjacency list matrix", function() {
+
+    var graph = getDirectedGraphForTesting();
+    var topologicalSort = graph.topologicalSort();
+
+    var indeces = {}
+    $.each(topologicalSort, function(i, v) { indeces[v] = i; });
+
+    ok(indeces['pants'] > indeces['undershorts']);
+    ok(indeces['shoes'] > indeces['undershorts']);
+    ok(indeces['shoes'] > indeces['socks']);
+    ok(indeces['belt'] > indeces['pants']);
+    ok(indeces['belt'] > indeces['shirt']);
+    ok(indeces['tie'] > indeces['shirt']);
+    ok(indeces['jacket'] > indeces['tie']);
+    ok(indeces['jacket'] > indeces['belt']);
+});
